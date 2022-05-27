@@ -16,10 +16,25 @@ aside {
     text-align: center;
 }
 
-/*article*/
+
+
 .inventory {
     margin: 3rem;
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.money {
+    display: flex;
+    flex-direction: row;
+}
+.money div {
+    margin: 1rem;
+    margin-bottom: 2rem;
+}
+.new-item-form {
+    margin: 1rem;
+
+    margin-bottom: 2rem;
 }

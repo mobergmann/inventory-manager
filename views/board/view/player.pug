@@ -2,6 +2,7 @@ extends ../../layout
 
 block content
     div.main
+        //- Player List
         aside
             h5.heading Player List
             div.player-list
@@ -236,10 +237,54 @@ block content
                         div.kick(class="btn btn-outline-dark")
                             <span class="material-icons">cancel</span>
 
-        article.inventory
-            div
+        //- Inventory
+        div.inventory
+            //- Money
+            article.money
                 h3 Money
                 div.money
-            div
+                    div(class="input-group")
+                        input(type="number", class="form-control disabled", disabled)
+                        span(class="input-group-text") €
+                    div(class="input-group")
+                        input(type="number", class="form-control")
+                        input(type="button", value="Post", class="btn btn-outline-secondary")
+            
+            //- Itmes
+            article.items
                 h3 Items
-                div.items
+                //- List of items
+                div.item-list
+                    div.item(class="input-group")
+                        label Name
+                            input(type="text", name="")
+                        label Description
+                            textarea(name="", cols="30", rows="10") 
+                        label Notes
+                            textarea(name="", cols="30", rows="10") 
+                        label Categories 
+                            input(type="text", name="")
+                    
+                    //- New Item
+                    form
+                        fieldset.new-item-form
+                            legend New Item
+                            div
+                                div.form-floating
+                                    input#new-name(type="text", name="name", placeholder="Name", class="form-control")
+                                    label(for="new-name") Name
+                                div.form-floating
+                                    input#new-quantity(type="number", name="quantity", placeholder="0", class="form-control")
+                                    label(for="new-quantity") Quantity
+                                div.form-floating
+                                    input#new-categories(type="text", name="categories", placeholder="#categorie1#categorie2", class="form-control")
+                                    label(class="form-label") Categories
+                            div
+                                div.form-floating
+                                    textarea#new-description(name="description", placeholder="Enter a description for this item", class="form-control")
+                                    label(for="new-description") Description
+                                div.form-floating
+                                    textarea#new-notes(name="notes", placeholder="Enter your notes for this item", class="form-control")
+                                    label(for="new-notes") Notes
+                            //- div 
+                                
