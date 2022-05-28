@@ -8,33 +8,33 @@ block content
             div.player-list
                 ul(class="list-group")
                     li(class="list-group-item") Du
-                        div.kick(class="btn btn-outline-dark")
+                        div.kick(class="btn btn-outline-danger")
                             <span class="material-icons">cancel</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility_off</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility_off</span>
                     li(class="list-group-item") Seb
-                        div.kick(class="btn btn-outline-dark")
+                        div.kick(class="btn btn-outline-danger")
                             <span class="material-icons">cancel</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility_off</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility_off</span>
                     li(class="list-group-item") Daniel
-                        div.kick(class="btn btn-outline-dark")
+                        div.kick(class="btn btn-outline-danger")
                             <span class="material-icons">cancel</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility_off</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility_off</span>
                     li(class="list-group-item") Henning
-                        div.kick(class="btn btn-outline-dark")
+                        div.kick(class="btn btn-outline-danger")
                             <span class="material-icons">cancel</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility</span>
-                        div.view(class="btn btn-outline-dark")
-                            <span class="material-icons">visibility_off</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility</span>
+                        //- div.view(class="btn btn-outline-dark")
+                        //-     <span class="material-icons">visibility_off</span>
 
         //- Inventory
         div.inventory
@@ -71,53 +71,46 @@ block content
                             div(class="form-floating")
                                 textarea#new-notes(name="notes", placeholder="Enter your notes for this item", class="form-control")
                                 label(for="new-notes") Notes
-
+                        div
+                            input(type="button", value="Save", class="btn btn-success")
+                            input(type="button", value="Cancel", class="btn btn-danger")
+                        
             //- Items
             article.items
                 h3 Items
-                //- List of Items
-                a(class="")
-                div(class="card")
-                    div(class="card-body")
-                        h5(class="card-title") Name
-                        p(class="card-text")
-                            small(class="text-muted") Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea tak
 
-
-
-                div#accordionPanelsStayOpenExample(class="accordion")
+                div#item-accordion(class="accordion")
+                    //- Item id:001
                     div(class="accordion-item")
-                        h2(class="accordion-header" id="panelsStayOpen-headingOne")
-                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne") Accordion Item #1
-                    //-
-                    div(id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne")
+                        h2(class="accordion-header" id="item-heading-001")
+                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item-collapse-001" aria-expanded="true" aria-controls="item-collapse-001") 
+                                | Müllnir Hammer
+                    div(id="item-collapse-001" class="accordion-collapse collapse" aria-labelledby="item-heading-001")
                         div(class="accordion-body")
-                            strong This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                            | test ...
 
+                    //- Item id:002
                     div(class="accordion-item")
-                        h2(class="accordion-header" id="panelsStayOpen-headingTwo")
-                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo") Accordion Item #2
-                    //-
-                    div(id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo")
+                        h2(class="accordion-header" id="item-heading-002")
+                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item-collapse-002" aria-expanded="true" aria-controls="item-collapse-002") 
+                                | BlaBlaguar Axt
+                    div(id="item-collapse-002" class="accordion-collapse collapse" aria-labelledby="item-heading-002")
                         div(class="accordion-body")
-                            strong This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                            | test ...
 
+                    //- Item id:003
                     div(class="accordion-item")
-                        h2(class="accordion-header" id="panelsStayOpen-headingThree")
-                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree") Accordion Item #3
-                    //-
-                    div(id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree")
+                        h2(class="accordion-header" id="item-heading-003")
+                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item-collapse-003" aria-expanded="true" aria-controls="item-collapse-003") 
+                                div.item-name Lauras Morgenstern
+                    div(id="item-collapse-003" class="accordion-collapse collapse" aria-labelledby="item-heading-003")
                         div(class="accordion-body")
-                            strong This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-
-                //small(class="text-muted") Quantity
-                    //label Name
-                    //    div Hans
-                    //label Quantity
-                    //    div 12
-                    //label Categories
-                    //
-                    //label Description
-                    //    div
-                    //label Notes
-                    //    div Enter your notes for this item
+                            label(class="fw-lighter") Description
+                                p.item-description Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea tak
+                            label(class="fw-lighter") Notes
+                                p.item-notes Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam volu
+                            label(class="fw-lighter") Categories
+                                div.categories #a #b #c
+                            label(class="fw-lighter") Quantits
+                                div
+                                    small.item-quantity 15x
