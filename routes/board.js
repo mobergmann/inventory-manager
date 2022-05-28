@@ -17,7 +17,11 @@ router.get('/view/:id', function (req, res, next) {
 
 
     let data = {
-        id: id
+        id: id,
+        name: "Müllnir",
+        quantity: 12,
+        description: "This is a description for this demo item...",
+        notes: "These are the notes for this demo item..."
     };
 
     if (is_gm(id)) {

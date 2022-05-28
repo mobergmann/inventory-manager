@@ -39,3 +39,12 @@ aside {
 } .new-item-form div {
     margin: 1rem;
 }
+
+
+fieldset .form-floating {
+    margin: 1rem;
+}
+
+.new-item-form-buttons input {
+    margin-right: 1rem;
+}

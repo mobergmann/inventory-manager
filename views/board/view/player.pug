@@ -2,9 +2,9 @@ extends ../../layout
 
 block content
     div.main
-        //- Player List
+        //- User List
         aside
-            h5.heading Player List
+            h5.heading User List
             div.player-list
                 ul(class="list-group")
                     li(class="list-group-item") Du
@@ -36,6 +36,7 @@ block content
                         //- div.view(class="btn btn-outline-dark")
                         //-     <span class="material-icons">visibility_off</span>
 
+
         //- Inventory
         div.inventory
             //- Money
@@ -47,70 +48,67 @@ block content
                         span(class="input-group-text") €
                     div(class="input-group")
                         input(type="number", class="form-control")
-                        input(type="button", value="Post", class="btn btn-outline-secondary")
+                        button(class="btn btn-outline-secondary") +
 
-            //- New Item
-            article.new-item
-                form
-                    fieldset.new-item-form
-                        legend New Item
-                        div
-                            div(class="form-floating")
-                                input#new-name(type="text", name="name", placeholder="Name", class="form-control")
-                                label(for="new-name") Name
-                            div(class="form-floating")
-                                input#new-quantity(type="number", name="quantity", placeholder="0", class="form-control")
-                                label(for="new-quantity") Quantity
-                            div(class="form-floating")
-                                input#new-categories(type="text", name="categories", placeholder="#categorie1#categorie2", class="form-control")
-                                label(class="form-label") Categories
-                        div
-                            div(class="form-floating")
-                                textarea#new-description(name="description", placeholder="Enter a description for this item", class="form-control")
-                                label(for="new-description") Description
-                            div(class="form-floating")
-                                textarea#new-notes(name="notes", placeholder="Enter your notes for this item", class="form-control")
-                                label(for="new-notes") Notes
-                        div
-                            input(type="button", value="Save", class="btn btn-success")
-                            input(type="button", value="Cancel", class="btn btn-danger")
-                        
+
+            div#new-item-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
+                div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
+                    div(class="modal-content")
+                        form
+                            fieldset
+                                div(class="modal-header")
+                                    h5#new-item-modal-Label.modal-title New Item
+                                div(class="modal-body")
+                                    div
+                                        div(class="form-floating", style="display:none")
+                                            input#new-id(type="number", name="name", placeholder="Name", class="form-control")
+                                            label(for="new-id") Id
+                                        div(class="form-floating")
+                                            input#new-name(type="text", name="name", placeholder="Name", class="form-control")
+                                            label(for="new-name") Name
+                                        div(class="form-floating")
+                                            input#new-quantity(type="number", name="quantity", placeholder="0", class="form-control")
+                                            label(for="new-quantity") Quantity
+                                        div(class="form-floating")
+                                            textarea#new-description(name="description", placeholder="Enter a description for this item", class="form-control")
+                                            label(for="new-description") Description
+                                        div(class="form-floating")
+                                            textarea#new-notes(name="notes", placeholder="Enter your notes for this item", class="form-control")
+                                            label(for="new-notes") Notes
+                                div(class="modal-footer")
+                                    div.new-item-form-buttons
+                                        input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success")
+                                        input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
+
+
             //- Items
             article.items
-                h3 Items
+                div
+                    h3 Items
+                    button(type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#new-item-modal")
+                        | +
 
-                div#item-accordion(class="accordion")
-                    //- Item id:001
-                    div(class="accordion-item")
-                        h2(class="accordion-header" id="item-heading-001")
-                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item-collapse-001" aria-expanded="true" aria-controls="item-collapse-001") 
-                                | Müllnir Hammer
-                    div(id="item-collapse-001" class="accordion-collapse collapse" aria-labelledby="item-heading-001")
-                        div(class="accordion-body")
-                            | test ...
+                div#item-list(class="accordion")
+                    //- Items will be added here
 
-                    //- Item id:002
-                    div(class="accordion-item")
-                        h2(class="accordion-header" id="item-heading-002")
-                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item-collapse-002" aria-expanded="true" aria-controls="item-collapse-002") 
-                                | BlaBlaguar Axt
-                    div(id="item-collapse-002" class="accordion-collapse collapse" aria-labelledby="item-heading-002")
-                        div(class="accordion-body")
-                            | test ...
 
-                    //- Item id:003
-                    div(class="accordion-item")
-                        h2(class="accordion-header" id="item-heading-003")
-                            button(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item-collapse-003" aria-expanded="true" aria-controls="item-collapse-003") 
-                                div.item-name Lauras Morgenstern
-                    div(id="item-collapse-003" class="accordion-collapse collapse" aria-labelledby="item-heading-003")
-                        div(class="accordion-body")
-                            label(class="fw-lighter") Description
-                                p.item-description Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea tak
-                            label(class="fw-lighter") Notes
-                                p.item-notes Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam volu
-                            label(class="fw-lighter") Categories
-                                div.categories #a #b #c
-                            label(class="fw-lighter") Quantits
-                                div
-                                    small.item-quantity 15x
+    // Template for an item (accordion)
+    template#item-template
+        item
+            div(class="accordion-item")
+                h2.ref1(class="accordion-header")
+                    button.ref2(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="")
+                        div.item-name
+            div.ref3(class="accordion-collapse collapse" aria-labelledby="")
+                div(class="accordion-body")
+                    div.item-id(style="display: none")
+
+                    label(class="fw-lighter") Quantity
+                    div.item-quantity
+
+                    label(class="fw-lighter") Description
+                    p.item-description
+
+                    label(class="fw-lighter") Notes
+                    p.item-notes
+
