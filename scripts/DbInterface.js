@@ -37,12 +37,12 @@ class DbInterface {
             CREATE TABLE "boards" (
                 "id" INTEGER NOT NULL UNIQUE,
                 "name" TEXT NOT NULL,
+                "money" INTEGER NOT NULL,
                 "owner" INTEGER NOT NULL,
                 "gamemaster" INTEGER NOT NULL,
                 FOREIGN KEY("gamemaster") REFERENCES "users"("id"),
-                FOREIGN KEY("owner") REFERENCES "users"("id"),
-                PRIMARY KEY("id" AUTOINCREMENT)
-        );`;
+                FOREIGN KEY("owner") REFERENCES "users"("id")
+            );`;
 
 
         db.exec(user_table);
@@ -113,7 +113,7 @@ class DbInterface {
         let owner = DbInterface.get_user(row.owner);
         let gamemaster = DbInterface.get_user(row.gamemaster);
 
-        return new Board(row.id, row.name, owner, gamemaster);
+        return new Board(row.id, row.name, row.money, owner, gamemaster);
     }
 
     /**
@@ -133,7 +133,7 @@ class DbInterface {
         rows.forEach(row => {
             let owner = DbInterface.get_user(row.owner);
             let gamemaster = DbInterface.get_user(row.gamemaster);
-            boards.push(new Board(row.id, row.name, owner, gamemaster));
+            boards.push(new Board(row.id, row.name, row.money, owner, gamemaster));
         });
 
         return boards;
@@ -146,8 +146,8 @@ class DbInterface {
      */
     static new_board(board) {
         const db = new sqlite(dbName);
-        const stmt = db.prepare('INSERT INTO boards (name, owner, gamemaster) VALUES (?, ?, ?)');
-        const info = stmt.run(board.name, board.owner, board.gamemaster);
+        const stmt = db.prepare('INSERT INTO boards (name, money, owner, gamemaster) VALUES (?, ?, ?, ?)');
+        const info = stmt.run(board.name, board.money, board.owner, board.gamemaster);
 
         return info.lastInsertRowid;
     }
