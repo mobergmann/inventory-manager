@@ -296,18 +296,19 @@ class DbInterface {
 
     /**
      * Adds players with a certain role to a project.
-     * The players and roles list need to be symmetrical. This means that roles[i] references the player[i].
+     * The players, roles and boards list need to be symmetrical. This means that roles[i] references the players[i], which references the boards[i]
      * @param project id of the project
-     * @param players list of player ids (needs to be symmetrical to the roles list)
-     * @param roles list of roles (needs to be symmetrical to the players list)
+     * @param players list of player ids (needs to be symmetrical to the roles and boards list)
+     * @param roles list of roles (needs to be symmetrical to the players and boards list)
+     * @param boards list of boards (needs to be symmetrical to the players and roles list)
      */
-    static add_players_to_project(project, players, roles) {
+    static add_players_to_project(project, players, roles, boards) {
         if (players.length !== roles.length) {
             throw "players list and roles list length not equal";
         }
 
         const db = new sqlite(dbName);
-        const insert = db.prepare('INSERT INTO players (project, user, role) VALUES (@project, @player, @user)');
+        const insert = db.prepare('INSERT INTO players (project, user, role, board) VALUES (@project, @player, @user, @board)');
 
         const insertMany = db.transaction((list) => {
             for (const i of list) insert.run(i);
@@ -316,21 +317,21 @@ class DbInterface {
         // construct insertion list
         let dual_list = [];
         for (let i = 0; i < players.length; ++i) {
-            dual_list[i] = {project, player: players[i], role: roles[i]};
+            dual_list[i] = {project, player: players[i], role: roles[i], board: boards[i]};
         }
 
         insertMany(dual_list);
     }
 
     /**
-     * Removes a player for the database
+     * Removes a player for a project
      * @param project id of the project
      * @param user id of the user
      */
     static remove_user_from_project(project, user) {
         const db = new sqlite(dbName);
 
-        const stmt = db.prepare(' DELETE FROM players WHERE project = ? AND user = ?');
+        const stmt = db.prepare('DELETE FROM players WHERE project = ? AND user = ?');
         const info = stmt.run(project, user);
     }
 

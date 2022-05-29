@@ -38,7 +38,8 @@ router.delete('/user/:id', function (req, res, next) {
 
 //#endregion
 
-//#region board
+
+//#region project
 
 router.get('/project/:id', function (req, res, next) {
     let id = Number(req.params.id);

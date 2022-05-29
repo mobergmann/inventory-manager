@@ -10,27 +10,27 @@ Here the information for the Database will be stored.
 
 ## Structure
 
-- user (1*n)
+- users (1*n)
     - id: PK
     - name: String
     - mail: String
     - pw_hash: String
     - registration_date: Date
-- project (1*n)
+- projects (1*n)
     - id: PK
     - name: String
-- board (1*n)
+- boards (1*n)
     - id: PK
     - name: String
-    - money: Int
-- item (1*n)
+    - money: Int <!-- TODO: remove -->
+- items (1*n)
     - id: PK
     - name: String
     - quantity: Int
     - description: String
     - notes: String
     - board: FK
-- players (n*m)
+- players (n*m*m)
     - project: FK
     - user: FK
     - board: FK
