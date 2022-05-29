@@ -53,6 +53,11 @@ class DbInterface {
 
     //#region user
 
+    /**
+     * Gets a user form the database, by a given id
+     * @param id id of the user
+     * @returns {User|undefined} A user object, if a user was found, undefined otherwise
+     */
     static get_user(id) {
         const db = new sqlite(dbName);
 
@@ -64,10 +69,17 @@ class DbInterface {
         return new User(row.id, row.name, row.mail, row.pw_hash, row.registration_date);
     }
 
+    /**
+     * Inserts a given user into the database
+     * @param user user object (ignoring the id filed)
+     * @returns {int} id of the inserted user
+     */
     static new_user(user) {
         const db = new sqlite(dbName);
-        const stmt = db.prepare('INSERT INTO users (name, ) VALUES ()');
+        const stmt = db.prepare('INSERT INTO users (name, mail, pw_hash, registration_date) VALUES (?, ?, ?, ?)');
+        const info = stmt.run(user.name, user.mail, user.pw_hash, user.registration_date);
 
+        return info.lastInsertRowid;
     }
 
     static edit_user(user) {
@@ -85,6 +97,11 @@ class DbInterface {
 
     //#region board
 
+    /**
+     * Gets a user form the database, by a given id
+     * @param id id of the board
+     * @returns {Board|undefined} A board object, if a board was found, undefined otherwise
+     */
     static get_board(id) {
         const db = new sqlite(dbName);
 
@@ -99,6 +116,11 @@ class DbInterface {
         return new Board(row.id, row.name, owner, gamemaster);
     }
 
+    /**
+     * Gets all boards, owned by a user
+     * @param user_id id of the user
+     * @returns {*[User]|undefined} list of boards, undefined if no boards found
+     */
     static get_all_boards(user_id) {
         const db = new sqlite(dbName);
 
@@ -117,9 +139,17 @@ class DbInterface {
         return boards;
     }
 
+    /**
+     * Inserts a given board into the database
+     * @param board board object (ignoring the id filed)
+     * @returns {int} id of the inserted board
+     */
     static new_board(board) {
-        // todo
-        throw "NotImplementedError";
+        const db = new sqlite(dbName);
+        const stmt = db.prepare('INSERT INTO boards (name, owner, gamemaster) VALUES (?, ?, ?)');
+        const info = stmt.run(board.name, board.owner, board.gamemaster);
+
+        return info.lastInsertRowid;
     }
 
     static edit_board(board) {
@@ -137,6 +167,11 @@ class DbInterface {
 
     //#region item
 
+    /**
+     * Gets an item form the database, by a given id
+     * @param id id of the item
+     * @returns {Item|undefined} An item object, if an item was found, undefined otherwise
+     */
     static get_item(id) {
         const db = new sqlite(dbName);
 
@@ -149,6 +184,11 @@ class DbInterface {
         return new Item(row.id, row.name, row.quantity, row.description, row.notes, board);
     }
 
+    /**
+     * Gets all items, owned by a board
+     * @param board_id id of the board
+     * @returns {*[Board]|undefined} list of items, undefined if no items found
+     */
     static get_all_items(board_id) {
         const db = new sqlite(dbName);
 
@@ -166,9 +206,17 @@ class DbInterface {
         return items;
     }
 
+    /**
+     * Inserts a given item into the database
+     * @param item item object (ignoring the id filed)
+     * @returns {int} id of the inserted item
+     */
     static new_item(item) {
-        // todo
-        throw "NotImplementedError";
+        const db = new sqlite(dbName);
+        const stmt = db.prepare('INSERT INTO items (name, quantity, description, description, notes, board) VALUES (?, ?, ?, ?, ?, ?)');
+        const info = stmt.run(item.name, item.quantity, item.description, item.description, item.notes, item.board);
+
+        return info.lastInsertRowid;
     }
 
     static edit_item(item) {
