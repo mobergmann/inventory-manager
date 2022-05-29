@@ -15,19 +15,10 @@ router.get('/view/:id', function (req, res, next) {
         res.status(404).send("Not found.");
     }
 
-
-    let data = {
-        id: id,
-        name: "Müllnir",
-        quantity: 12,
-        description: "This is a description for this demo item...",
-        notes: "These are the notes for this demo item..."
-    };
-
     if (is_gm(id)) {
-        res.render('board/view/gm', {title: 'Board', data: data});
+        res.render('board/view', {title: 'Board', is_gm: true});
     } else {
-        res.render('board/view/player', {title: 'Board', data: data});
+        res.render('board/view', {title: 'Board', is_gm: false});
     }
 });
 

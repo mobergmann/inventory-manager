@@ -1,7 +1,5 @@
-const item_list = document.getElementById("item-list");
-
-
 class Item {
+    static item_list = document.getElementById("item-list");
 
     constructor(id, name, quantity, description, notes) {
         this.id = id;
@@ -45,9 +43,23 @@ class Item {
         return clone;
     }
 
+    display() {
+        let dom = this.to_dom();
+        Item.item_list.append(dom);
+    }
+
 }
 
-function display_item(item) {
-    let dom = item.to_dom();
-    item_list.append(dom);
+function reset_item_form() {
+    let item_form = document.getElementById("mew-item-form");
+    item_form.reset();
 }
+
+
+
+function submit_item() {
+    console.log("Hi");
+    reset_item_form();
+}
+
+

@@ -1,4 +1,4 @@
-extends ../../layout
+extends ../layout
 
 block content
     div.main
@@ -44,17 +44,18 @@ block content
                 h3 Money
                 div.money
                     div(class="input-group")
-                        input(type="number", class="form-control disabled", disabled)
+                        input#money-out(type="number", class="form-control disabled", disabled)
                         span(class="input-group-text") €
                     div(class="input-group")
-                        input(type="number", class="form-control")
-                        button(class="btn btn-outline-secondary") +
+                        input#money-in(type="number", class="form-control")
+                        button(class="btn btn-outline-secondary", style="width:2rem") +
+                        button(class="btn btn-outline-secondary", style="width:2rem") -
 
 
             div#new-item-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
                 div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
                     div(class="modal-content")
-                        form
+                        form#mew-item-form(onsubmit="return false")
                             fieldset
                                 div(class="modal-header")
                                     h5#new-item-modal-Label.modal-title New Item
@@ -77,7 +78,7 @@ block content
                                             label(for="new-notes") Notes
                                 div(class="modal-footer")
                                     div.new-item-form-buttons
-                                        input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success")
+                                        input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_item()")
                                         input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
 
 
@@ -112,3 +113,6 @@ block content
                     label(class="fw-lighter") Notes
                     p.item-notes
 
+
+
+    script(src="/javascripts/view.js")
