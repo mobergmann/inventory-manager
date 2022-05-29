@@ -125,9 +125,6 @@ class DbInterface {
         const db = new sqlite(dbName);
 
         const rows = db.prepare('SELECT * FROM boards WHERE owner = ?').all(user_id);
-        if (!rows.length) {
-            return undefined;
-        }
 
         let boards = [];
         rows.forEach(row => {
@@ -193,9 +190,6 @@ class DbInterface {
         const db = new sqlite(dbName);
 
         const rows = db.prepare('SELECT * FROM items WHERE board = ?').all(board_id);
-        if (!rows.length) {
-            return undefined;
-        }
 
         let items = [];
         rows.forEach(row => {

@@ -65,12 +65,7 @@ router.get('/board/all/:user_id', function (req, res, next) {
     }
 
     let boards = DbInterface.get_all_boards(user_id);
-    if (boards === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        return res.status(200).end(JSON.stringify(boards));
-    }
+    return res.status(200).end(JSON.stringify(boards));
 });
 
 // new board
@@ -117,12 +112,7 @@ router.get('/item/all/:board_id', function (req, res, next) {
     }
 
     let items = DbInterface.get_all_items(board_id);
-    if (items === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        return res.status(200).end(JSON.stringify(items));
-    }
+    return res.status(200).end(JSON.stringify(items));
 });
 
 // new item
