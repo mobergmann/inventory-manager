@@ -23,7 +23,6 @@ Here the information for the Database will be stored.
     - id: PK
     - name: String
     - money: Int
-    - project: FK
 - item (1*n)
     - id: PK
     - name: String
@@ -34,4 +33,5 @@ Here the information for the Database will be stored.
 - players (n*m)
     - project: FK
     - user: FK
+    - board: FK
     - role: ("player" | "gamemaster")
