@@ -127,7 +127,10 @@ class DbInterface {
 
         let projects = [];
         rows.forEach(row => {
-            projects.push(new Project(row.id, row.name));
+            let project_id = row.project;
+
+            let project = DbInterface.get_project(project_id);
+            projects.push(project);
         });
 
         return projects;

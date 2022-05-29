@@ -38,6 +38,47 @@ router.delete('/user/:id', function (req, res, next) {
 
 //#endregion
 
+//#region board
+
+router.get('/project/:id', function (req, res, next) {
+    let id = Number(req.params.id);
+    if (isNaN(id)) {
+        res.status(404).send();
+    }
+
+    let project = DbInterface.get_project(id);
+    if (project === undefined) {
+        return res.status(404).end();
+    }
+    else {
+        return res.status(200).end(JSON.stringify(project));
+    }
+});
+
+router.get('/project/all/:user_id', function (req, res, next) {
+    let user_id = Number(req.params.user_id);
+    if (isNaN(user_id)) {
+        res.status(404).send();
+    }
+
+    let projects = DbInterface.get_all_projects_by_user(user_id);
+    return res.status(200).end(JSON.stringify(projects));
+});
+
+router.post('/project/:id', function (req, res, next) {
+    return res.status(501).end("This Route is not Implemented");
+});
+
+router.put('/project/:id', function (req, res, next) {
+    return res.status(501).end("This Route is not Implemented");
+});
+
+router.delete('/project/:id', function (req, res, next) {
+    return res.status(501).end("This Route is not Implemented");
+});
+
+//#endregion
+
 
 //#region board
 
