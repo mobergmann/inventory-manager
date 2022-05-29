@@ -61,12 +61,13 @@ class DbInterface {
             return undefined;
         }
 
-        return User(row.id, row.name, row.mail, row.pw_hash, row.registration_date);
+        return new User(row.id, row.name, row.mail, row.pw_hash, row.registration_date);
     }
 
     static new_user(user) {
-        // todo
-        throw "NotImplementedError";
+        const db = new sqlite(dbName);
+        const stmt = db.prepare('INSERT INTO users (name, ) VALUES ()');
+
     }
 
     static edit_user(user) {
@@ -95,7 +96,7 @@ class DbInterface {
         let owner = DbInterface.get_user(row.owner);
         let gamemaster = DbInterface.get_user(row.gamemaster);
 
-        return Board(row.id, row.name, owner, gamemaster);
+        return new Board(row.id, row.name, owner, gamemaster);
     }
 
     static get_all_boards(user_id) {
@@ -110,9 +111,7 @@ class DbInterface {
         rows.forEach(row => {
             let owner = DbInterface.get_user(row.owner);
             let gamemaster = DbInterface.get_user(row.gamemaster);
-
-            let board = Board(row.id, row.name, owner, gamemaster);
-            boards.push(board);
+            boards.push(new Board(row.id, row.name, owner, gamemaster));
         });
 
         return boards;
@@ -147,13 +146,13 @@ class DbInterface {
         }
 
         let board = DbInterface.get_board(row.board);
-        return Item(row.id, row.name, row.quantity, row.description, row.notes, board);
+        return new Item(row.id, row.name, row.quantity, row.description, row.notes, board);
     }
 
-    static get_all_items(user_id) {
+    static get_all_items(board_id) {
         const db = new sqlite(dbName);
 
-        const rows = db.prepare('SELECT * FROM items WHERE id = ?').all(user_id);
+        const rows = db.prepare('SELECT * FROM items WHERE board = ?').all(board_id);
         if (!rows.length) {
             return undefined;
         }
@@ -161,7 +160,7 @@ class DbInterface {
         let items = [];
         rows.forEach(row => {
             let board = DbInterface.get_board(row.board);
-            items.push(Item(row.id, row.name, row.quantity, row.description, row.notes, board));
+            items.push(new Item(row.id, row.name, row.quantity, row.description, row.notes, board));
         });
 
         return items;
