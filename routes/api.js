@@ -5,6 +5,7 @@ const DbInterface = require("../scripts/DbInterface");
 
 //#region user
 
+// get user
 router.get('/user/:id', function (req, res, next) {
     let id = Number(req.params.id);
     if (isNaN(id)) {
@@ -20,14 +21,17 @@ router.get('/user/:id', function (req, res, next) {
     }
 });
 
+// new user
 router.post('/user/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+// edit user
 router.put('/user/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+// delete user
 router.delete('/user/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
@@ -37,6 +41,7 @@ router.delete('/user/:id', function (req, res, next) {
 
 //#region board
 
+// get board
 router.get('/board/:id', function (req, res, next) {
     let id = Number(req.params.id);
     if (isNaN(id)) {
@@ -52,6 +57,7 @@ router.get('/board/:id', function (req, res, next) {
     }
 });
 
+// get all boards, owned by user
 router.get('/board/all/:user_id', function (req, res, next) {
     let user_id = Number(req.params.user_id);
     if (isNaN(user_id)) {
@@ -67,14 +73,17 @@ router.get('/board/all/:user_id', function (req, res, next) {
     }
 });
 
+// new board
 router.post('/board/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+// edit board
 router.put('/board/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+// delete board
 router.delete('/board/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
@@ -84,6 +93,7 @@ router.delete('/board/:id', function (req, res, next) {
 
 //#region item
 
+// get item
 router.get('/item/:id', function (req, res, next) {
     let id = Number(req.params.id);
     if (isNaN(id)) {
@@ -99,13 +109,14 @@ router.get('/item/:id', function (req, res, next) {
     }
 });
 
-router.get('/item/all/:user_id', function (req, res, next) {
-    let user_id = Number(req.params.user_id);
-    if (isNaN(user_id)) {
+// get all items owned by board
+router.get('/item/all/:board_id', function (req, res, next) {
+    let board_id = Number(req.params.board_id);
+    if (isNaN(board_id)) {
         res.status(404).send();
     }
 
-    let items = DbInterface.get_all_items(user_id);
+    let items = DbInterface.get_all_items(board_id);
     if (items === undefined) {
         return res.status(404).end();
     }
@@ -114,19 +125,21 @@ router.get('/item/all/:user_id', function (req, res, next) {
     }
 });
 
+// new item
 router.post('/item/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+// edit item
 router.put('/item/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+// delete id
 router.delete('/item/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
 //#endregion
-
 
 module.exports = router;
