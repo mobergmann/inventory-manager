@@ -72,6 +72,22 @@ class DbInterface {
     }
 
     /**
+     * Gets a stripped user form the database, by a given id
+     * @param id id of the user
+     * @returns {User|undefined} A user object, if a user was found, undefined otherwise
+     */
+    static get_stripped_user(id) {
+        const db = new sqlite(dbName);
+
+        const row = db.prepare('SELECT id, name FROM users WHERE id = ?').get(id);
+        if (row === undefined) {
+            return undefined;
+        }
+
+        return {id: row.id, name: row.name};
+    }
+
+    /**
      * Inserts a given user into the database
      * @param user user object (ignoring the id filed)
      * @returns {int} id of the inserted user
@@ -123,13 +139,13 @@ class DbInterface {
     static get_all_projects_by_user(user_id) {
         const db = new sqlite(dbName);
 
-        const rows = db.prepare('SELECT * FROM players WHERE user = ?').all(user_id);
+        const rows = db.prepare('SELECT id FROM (players INNER JOIN projects) WHERE user = ?;').all(user_id);
 
         let projects = [];
         rows.forEach(row => {
-            let project_id = row.project;
+            let project_id = row.id;
 
-            let project = DbInterface.get_project(project_id);
+            let project = DbInterface.get_project(project_id); // todo extract data from joined table
             projects.push(project);
         });
 
@@ -137,21 +153,24 @@ class DbInterface {
     }
 
     /**
-     * Gets all project, owned by a user
+     * Gets all users, who are part of a project
      * @param project_id id of the user
      * @returns {*[project]|undefined} list of projects, undefined if no project found
      */
     static get_all_user_by_project(project_id) {
         const db = new sqlite(dbName);
 
-        const rows = db.prepare('SELECT * FROM players WHERE project = ?').all(project_id);
+        const rows = db.prepare('SELECT user FROM (players INNER JOIN inventories ON players.inventory = inventories.id) WHERE project = ?;').all(project_id);
 
-        let projects = [];
+        let users = [];
         rows.forEach(row => {
-            projects.push(new Project(row.id, row.name));
+            let user_id = row.user;
+
+            let user = DbInterface.get_stripped_user(user_id); // todo extract data from joined table
+            users.push(user);
         });
 
-        return projects;
+        return users;
     }
 
     /**

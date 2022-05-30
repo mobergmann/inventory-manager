@@ -5,37 +5,7 @@ block content
         //- User List
         aside
             h5.heading User List
-            div.player-list
-                ul(class="list-group")
-                    li(class="list-group-item") Du
-                        div.kick(class="btn btn-outline-danger")
-                            <span class="material-icons">cancel</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility_off</span>
-                    li(class="list-group-item") Seb
-                        div.kick(class="btn btn-outline-danger")
-                            <span class="material-icons">cancel</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility_off</span>
-                    li(class="list-group-item") Daniel
-                        div.kick(class="btn btn-outline-danger")
-                            <span class="material-icons">cancel</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility_off</span>
-                    li(class="list-group-item") Henning
-                        div.kick(class="btn btn-outline-danger")
-                            <span class="material-icons">cancel</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility</span>
-                        //- div.view(class="btn btn-outline-dark")
-                        //-     <span class="material-icons">visibility_off</span>
-
+            div#players-list
 
         //- Inventory
         div.inventory
@@ -115,4 +85,4 @@ block content
 
 
 
-    script(src="/javascripts/view.js")
+    script(src="/javascripts/board/view.js")

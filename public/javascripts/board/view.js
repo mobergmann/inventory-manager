@@ -55,11 +55,63 @@ function reset_item_form() {
     item_form.reset();
 }
 
-
-
 function submit_item() {
     console.log("Hi");
     reset_item_form();
 }
 
 
+
+function display_no_users_found() {
+    alert("Not Implemented");
+}
+
+function display_users(players) {
+    const players_list = document.getElementById("players-list");
+
+    players.forEach(player => {
+        let tmp = `
+            <ul class="list-group">
+                <li class="list-group-item">
+                    ${player.name}
+                    <div class="kick btn btn-outline-danger">
+                        <span class="material-icons">cancel</span>
+                    </div>
+                    <!-- div.view(class="btn btn-outline-dark")-->
+                    <!--     <span class="material-icons">visibility</span>-->
+                    <!-- div.view(class="btn btn-outline-dark")-->
+                    <!--     <span class="material-icons">visibility_off</span>-->
+                </li>
+            </ul>`;
+
+        players_list.innerHTML += tmp;
+    });
+}
+
+function display_error(error) {
+    alert("Not Implemented\n\n" + error);
+}
+
+
+let tmp1 = window.location.href.split('/');
+let tmp2 = tmp1[tmp1.length-1];
+const project_id = Number(tmp2);
+
+const xhr = new XMLHttpRequest();
+
+xhr.onload = function() {
+    if (xhr.status === 200) {
+        let users = JSON.parse(xhr.responseText);
+        display_users(users);
+    } else if (xhr.status === 404) {
+        display_no_users_found();
+    }
+}
+
+xhr.onerror = function() {
+    alert("Network error occurred");
+}
+
+xhr.open('GET', `/api/project/users/${project_id}`);
+// xhr.setRequestHeader("Content-Type", "application/json");
+xhr.send();

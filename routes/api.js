@@ -97,6 +97,9 @@ router.get('/project/:id', function (req, res, next) {
  * get all projects, available for user
  */
 router.get('/project/all/:user_id', function (req, res, next) {
+    // todo is right user id
+    // todo can user id be retrieved from logged in cache
+
     let user_id = Number(req.params.user_id);
     if (isNaN(user_id)) {
         res.status(404).send();
@@ -105,6 +108,28 @@ router.get('/project/all/:user_id', function (req, res, next) {
     let projects = DbInterface.get_all_projects_by_user(user_id);
     return res.status(200).end(JSON.stringify(projects));
 });
+
+/**
+ * get all users in project
+ */
+router.get('/project/users/:project_id', function (req, res, next) {
+    // todo is right user id
+    // todo can user id be retrieved from logged in cache
+
+    let project_id = Number(req.params.project_id);
+    if (isNaN(project_id)) {
+        res.status(404).send();
+    }
+
+    let users = DbInterface.get_all_user_by_project(project_id);
+    // let users = [];
+    // user_ids.forEach(id => {
+    //     let user = DbInterface.get_stripped_user(id);
+    //     users.push(user);
+    // });
+    return res.status(200).end(JSON.stringify(users));
+});
+
 
 router.post('/project/:id', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");

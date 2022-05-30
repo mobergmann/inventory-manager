@@ -32,20 +32,17 @@ function display_error(error) {
 
 const xhr = new XMLHttpRequest();
 
-//triggered when the response is completed
 xhr.onload = function() {
     if (xhr.status === 200) {
         let projects = JSON.parse(xhr.responseText);
         display_projects(projects);
-        console.log("hi");
     } else if (xhr.status === 404) {
         display_no_projects_found();
     }
 }
 
-//triggered when a network-level error occurs with the request
 xhr.onerror = function() {
-    console.log("Network error occurred");
+    alert("Network error occurred");
 }
 
 xhr.open('GET', `/api/project/all/${my_id}`);
