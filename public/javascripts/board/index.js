@@ -9,7 +9,7 @@ function display_projects(projects) {
 
     projects.forEach(project => {
         let d = `
-            <a href="board/view/${project.id}">
+            <a href="/board/view/${project.id}">
                 <li class="list-group-item">
                     <div class="name">${project.name}</div>
                     <div class="delete btn btn-outline-dark">
