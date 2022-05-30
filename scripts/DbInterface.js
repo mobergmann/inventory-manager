@@ -188,7 +188,7 @@ class DbInterface {
      * @param id id of the board
      * @returns {Board|undefined} A board object, if a board was found, undefined otherwise
      */
-    static get_board(id) {
+    static get_inventory(id) {
         const db = new sqlite(dbName);
 
         const row = db.prepare('SELECT * FROM boards WHERE id = ?').get(id);
@@ -243,7 +243,7 @@ class DbInterface {
             return undefined;
         }
 
-        let board = DbInterface.get_board(row.board);
+        let board = DbInterface.get_inventory(row.board);
         return new Item(row.id, row.name, row.quantity, row.description, row.notes, board);
     }
 
@@ -259,7 +259,7 @@ class DbInterface {
 
         let items = [];
         rows.forEach(row => {
-            let board = DbInterface.get_board(row.board);
+            let board = DbInterface.get_inventory(row.board);
             items.push(new Item(row.id, row.name, row.quantity, row.description, row.notes, board));
         });
 
