@@ -179,12 +179,44 @@ router.get('/inventory/all/:user_id', function (req, res, next) {
 });
 
 // new inventory
-router.post('/inventory/:id', function (req, res, next) {
+router.post('/inventory', function (req, res, next) {
     return res.status(501).end("This Route is not Implemented");
 });
 
+
+// get money
+router.get('/inventory/:inventory_id/money', function (req, res, next) {
+    let inventory_id = Number(req.params.inventory_id);
+    if (isNaN(inventory_id)) {
+        res.status(404).send();
+    }
+
+    let money = DbInterface.get_inventory(inventory_id).money;
+
+    return res.status(200).end(JSON.stringify(money));
+});
+
+// add money
+router.put('/inventory/:inventory_id/money/:value', function (req, res, next) {
+    let inventory_id = Number(req.params.inventory_id);
+    if (isNaN(inventory_id)) {
+        res.status(404).send();
+    }
+
+    let value = Number(req.params.value);
+    if (isNaN(value)) {
+        res.status(500).send();
+    }
+
+    let money = DbInterface.get_inventory(inventory_id).money + value;
+
+    return res.status(200).end(JSON.stringify(value));
+    // return res.status(501).end("This Route is not Implemented");
+});
+
+
 // edit inventory
-router.put('/inventory/:id', function (req, res, next) {
+router.put('/inventory', function (req, res, next) {
     // todo is
     return res.status(501).end("This Route is not Implemented");
 });
@@ -218,13 +250,13 @@ router.get('/item/:id', function (req, res, next) {
 });
 
 // get all items owned by inventory
-router.get('/item/all/:board_id', function (req, res, next) {
-    let board_id = Number(req.params.board_id);
-    if (isNaN(board_id)) {
+router.get('/item/all/:inventory_id', function (req, res, next) {
+    let inventory_id = Number(req.params.inventory_id);
+    if (isNaN(inventory_id)) {
         res.status(404).send();
     }
 
-    let items = DbInterface.get_all_items(board_id);
+    let items = DbInterface.get_all_items(inventory_id);
     return res.status(200).end(JSON.stringify(items));
 });
 

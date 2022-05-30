@@ -181,7 +181,7 @@ class DbInterface {
     static new_project(project) {
         const db = new sqlite(dbName);
 
-        const stmt = db.prepare('INSERT INTO projects (name) VALUES (?)');
+        const stmt = db.prepare('INSERT INTO projects (name, gamemaster) VALUES (?, ?)');
         const info = stmt.run(project.name);
 
         return info.lastInsertRowid;
@@ -200,7 +200,7 @@ class DbInterface {
     //#endregion
 
 
-    //#region board
+    //#region inventory
 
     /**
      * Gets a board form the database, by a given id
@@ -210,7 +210,7 @@ class DbInterface {
     static get_inventory(id) {
         const db = new sqlite(dbName);
 
-        const row = db.prepare('SELECT * FROM boards WHERE id = ?').get(id);
+        const row = db.prepare('SELECT * FROM inventories WHERE id = ?').get(id);
         if (row === undefined) {
             return undefined;
         }
@@ -222,24 +222,24 @@ class DbInterface {
 
     /**
      * Inserts a given board into the database
-     * @param board board object (ignoring the id filed)
+     * @param inventory board object (ignoring the id filed)
      * @returns {int} id of the inserted board
      */
-    static new_board(board) {
+    static new_inventory(inventory) {
         const db = new sqlite(dbName);
 
-        const stmt = db.prepare('INSERT INTO boards (name, money, project) VALUES (?, ?, ?)');
-        const info = stmt.run(board.name, board.money, board.project);
+        const stmt = db.prepare('INSERT INTO inventories (money, project) VALUES (?, ?)');
+        const info = stmt.run(inventory.money, inventory.project);
 
         return info.lastInsertRowid;
     }
 
-    static edit_board(board) {
+    static edit_inventory(board) {
         // todo
         throw "NotImplementedError";
     }
 
-    static delete_board(board) {
+    static delete_inventory(board) {
         // todo
         throw "NotImplementedError";
     }
@@ -268,18 +268,18 @@ class DbInterface {
 
     /**
      * Gets all items, owned by a board
-     * @param board_id id of the board
+     * @param inventory_id id of the board
      * @returns {*[Board]|undefined} list of items, undefined if no items found
      */
-    static get_all_items(board_id) {
+    static get_all_items(inventory_id) {
         const db = new sqlite(dbName);
 
-        const rows = db.prepare('SELECT * FROM items WHERE board = ?').all(board_id);
+        const rows = db.prepare('SELECT id FROM items WHERE inventory = ?').all(inventory_id);
 
         let items = [];
         rows.forEach(row => {
-            let board = DbInterface.get_inventory(row.board);
-            items.push(new Item(row.id, row.name, row.quantity, row.description, row.notes, board));
+            let item = DbInterface.get_item(row.id);
+            items.push(item);
         });
 
         return items;
@@ -292,7 +292,7 @@ class DbInterface {
      */
     static new_item(item) {
         const db = new sqlite(dbName);
-        const stmt = db.prepare('INSERT INTO items (name, quantity, description, notes, board) VALUES (?, ?, ?, ?, ?)');
+        const stmt = db.prepare('INSERT INTO items (name, quantity, description, notes, inventory) VALUES (?, ?, ?, ?, ?)');
         const info = stmt.run(item.name, item.quantity, item.description, item.notes, item.board);
 
         return info.lastInsertRowid;
@@ -327,7 +327,7 @@ class DbInterface {
         }
 
         const db = new sqlite(dbName);
-        const insert = db.prepare('INSERT INTO players (project, user, role, board) VALUES (@project, @player, @user, @board)');
+        const insert = db.prepare('INSERT INTO players (user, inventory) VALUES (@user, @inventory)');
 
         const insertMany = db.transaction((list) => {
             for (const i of list) insert.run(i);
@@ -350,8 +350,10 @@ class DbInterface {
     static remove_user_from_project(project, user) {
         const db = new sqlite(dbName);
 
-        const stmt = db.prepare('DELETE FROM players WHERE project = ? AND user = ?');
+        const stmt = db.prepare('DELETE FROM players WHERE inventory = ? AND user = ?');
         const info = stmt.run(project, user);
+
+        throw "NotImplementedError";
     }
 
     //#endregion

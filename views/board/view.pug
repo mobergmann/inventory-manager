@@ -18,8 +18,8 @@ block content
                         span(class="input-group-text") €
                     div(class="input-group")
                         input#money-in(type="number", class="form-control")
-                        button(class="btn btn-outline-secondary", style="width:2rem") +
-                        button(class="btn btn-outline-secondary", style="width:2rem") -
+                        button#add_money_btn(class="btn btn-outline-secondary", style="width:2rem", onclick="add_money()") +
+                        button#sub_money_btn(class="btn btn-outline-secondary", style="width:2rem", onclick="add_money(true)") -
 
 
             div#new-item-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
@@ -59,13 +59,13 @@ block content
                     button(type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#new-item-modal")
                         | +
 
-                div#item-list(class="accordion")
+                div#items-list(class="accordion")
                     //- Items will be added here
 
 
     // Template for an item (accordion)
     template#item-template
-        item
+        div.item
             div(class="accordion-item")
                 h2.ref1(class="accordion-header")
                     button.ref2(class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="")
