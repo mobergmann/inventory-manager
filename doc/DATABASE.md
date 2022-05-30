@@ -4,34 +4,31 @@ This is the readme/ documentation for the database.
 Here the information for the Database will be stored.
 
 ## Acronyms
-- `PK` stands for Primary Key
-- `FK` stands for Foreign Key
-
+- `PK` stands for Primary Key. The Type should always be Int.
+- `FK` stands for Foreign Key. The FK is given in brackets.
 
 ## Structure
-
-- users (1*n)
+- users
     - id: PK
     - name: String
     - mail: String
     - pw_hash: String
     - registration_date: Date
-- projects (1*n)
+- projects
     - id: PK
     - name: String
-- boards (1*n)
+    - gamemaster: FK(users->id)
+- inventories
     - id: PK
-    - name: String
-    - money: Int <!-- TODO: remove -->
-- items (1*n)
+    - money: Int
+    - project: FK(projects->id)
+- items
     - id: PK
     - name: String
     - quantity: Int
     - description: String
     - notes: String
-    - board: FK
-- players (n*m*m)
-    - project: FK
-    - user: FK
-    - board: FK
-    - role: ("player" | "gamemaster")
+    - inventory: FK(inventories->id)
+- players
+  - user: FK(users->id)
+  - inventory: FK(inventories->id)
