@@ -32,5 +32,5 @@ Here the information for the Database will be stored.
     - notes: String (D: "")
     - inventory: FK(inventories->id) (NN)
 - players (1:n)
-    - inventory: FK(inventories->id) (U, NN)
     - user: FK(users->id) (NN)
+    - inventory: FK(inventories->id) (U, NN)

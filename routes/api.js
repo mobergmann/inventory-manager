@@ -1,283 +1,188 @@
 const express = require('express');
 const router = express.Router();
+const {body, validationResult} = require('express-validator');
 const DbInterface = require("../scripts/DbInterface");
 
 
-//#region user
+const user_validation = [
+    // body("id").isInt({min: 1}),
+    body("name").isLength({min: 3}),
+    body("mail").isEmail(),
+    body("pw_hash").notEmpty(),
+    body("registration_date").isDate({format: "%Y-%m-%d %H:%M:%S"})
+];
+const project_validation = [
+    // body("id").isInt({min: 1}),
+    body("name").isLength({min: 3}),
+    body("gamemaster").isInt({min: 1})
+];
+const item_validation = [
+    // body("id").isInt({min: 1}),
+    body("name").notEmpty(),
+    body("quantity").isDecimal(),
+    // body("description").,
+    // body("notes").,
+    body("board").isInt({min: 1})
+];
+const inventory_validation = [
+    body("money").isInt()
+];
+
+
+//#region GET
 
 /**
- * get user
+ * get all projects visible to the given user
  */
-router.get('/user/full/:id', function (req, res, next) {
-    // todo is admin or is same user
-
-    let id = Number(req.params.id);
-    if (isNaN(id)) {
-        res.status(404).send();
-    }
-
-    let user = DbInterface.get_user(id);
-    if (user === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        return res.status(200).end(JSON.stringify(user));
-    }
-});
-
-/**
- * get (stripped version of) user
- */
-router.get('/user/:id', function (req, res, next) {
-    let id = Number(req.params.id);
-    if (isNaN(id)) {
-        res.status(404).send();
-    }
-
-    let user = DbInterface.get_user(id);
-    if (user === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        let stripped_user = {id: user.id, name: user.name};
-        return res.status(200).end(JSON.stringify(stripped_user));
-    }
-});
-
-/**
- * new user
- */
-router.post('/user/:id', function (req, res, next) {
-    // todo is admin
-    return res.status(501).end("This Route is not Implemented");
-});
-
-/**
- * edit user
- */
-router.put('/user/:id', function (req, res, next) {
-    // todo is admin or same user
-    return res.status(501).end("This Route is not Implemented");
-});
-
-/**
- * delete user
- */
-router.delete('/user/:id', function (req, res, next) {
-    // todo is admin or same user
-    return res.status(501).end("This Route is not Implemented");
-});
-
-//#endregion
-
-
-//#region project
-
-/**
- * get project
- */
-router.get('/project/:id', function (req, res, next) {
-    // todo is user part of project
-
-    let id = Number(req.params.id);
-    if (isNaN(id)) {
-        res.status(404).send();
-    }
-
-    let project = DbInterface.get_project(id);
-    if (project === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        return res.status(200).end(JSON.stringify(project));
-    }
-});
-
-/**
- * get all projects, available for user
- */
-router.get('/project/all/:user_id', function (req, res, next) {
-    // todo is right user id
-    // todo can user id be retrieved from logged in cache
-
+router.get("/projects/:user_id", function (req, res, next) {
     let user_id = Number(req.params.user_id);
     if (isNaN(user_id)) {
         res.status(404).send();
     }
 
-    let projects = DbInterface.get_all_projects_by_user(user_id);
+    let projects = DbInterface.get_projects(user_id);
+    res.setHeader('Content-Type', 'application/json');
     return res.status(200).end(JSON.stringify(projects));
 });
 
 /**
- * get all users in project
+ * Get all users in a project
  */
-router.get('/project/users/:project_id', function (req, res, next) {
-    // todo is right user id
-    // todo can user id be retrieved from logged in cache
-
+router.get("/project/users/:project_id", function (req, res, next) {
     let project_id = Number(req.params.project_id);
     if (isNaN(project_id)) {
         res.status(404).send();
     }
 
-    let users = DbInterface.get_all_user_by_project(project_id);
-    // let users = [];
-    // user_ids.forEach(id => {
-    //     let user = DbInterface.get_stripped_user(id);
-    //     users.push(user);
-    // });
+    let users = DbInterface.get_users(project_id);
+    res.setHeader('Content-Type', 'application/json');
     return res.status(200).end(JSON.stringify(users));
 });
 
-
-router.post('/project/:id', function (req, res, next) {
-    return res.status(501).end("This Route is not Implemented");
-});
-
-router.put('/project/:id', function (req, res, next) {
-    // todo is gamemaster of project
-    return res.status(501).end("This Route is not Implemented");
-});
-
-router.delete('/project/:id', function (req, res, next) {
-    // todo is gamemaster of project
-    return res.status(501).end("This Route is not Implemented");
-});
-
-//#endregion
-
-
-//#region inventory
-
-// get inventory
-router.get('/inventory/:id', function (req, res, next) {
-    // todo is gamemaster or player of inventory
-    let id = Number(req.params.id);
-    if (isNaN(id)) {
+/**
+ * Get inventories, of a certain project
+ */
+router.get("/inventories/:project_id", function (req, res, next) {
+    let project_id = Number(req.params.project_id);
+    if (isNaN(project_id)) {
         res.status(404).send();
     }
 
-    let inventory = DbInterface.get_inventory(id);
-    if (inventory === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        return res.status(200).end(JSON.stringify(inventory));
-    }
-});
-
-// get all inventories, owned by user
-router.get('/inventory/all/:user_id', function (req, res, next) {
-    let user_id = Number(req.params.user_id);
-    if (isNaN(user_id)) {
-        res.status(404).send();
-    }
-
-    let inventories = DbInterface.get_all_boards(user_id);
+    let inventories = DbInterface.get_inventories(project_id);
+    res.setHeader('Content-Type', 'application/json');
     return res.status(200).end(JSON.stringify(inventories));
 });
 
-// new inventory
-router.post('/inventory', function (req, res, next) {
-    return res.status(501).end("This Route is not Implemented");
+/**
+ * Get inventory
+ */
+router.get("/inventory/:inventory_id", function (req, res, next) {
+    let project_id = Number(req.params.project_id);
+    if (isNaN(inventory_id)) {
+        res.status(404).send();
+    }
+
+    let inventory = DbInterface.get_inventory(project_id);
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(JSON.stringify(inventory));
 });
 
-
-// get money
-router.get('/inventory/:inventory_id/money', function (req, res, next) {
+/**
+ * Get all items in inventory
+ */
+router.get("/inventory/items/:inventory_id", function (req, res, next) {
     let inventory_id = Number(req.params.inventory_id);
     if (isNaN(inventory_id)) {
         res.status(404).send();
     }
 
-    let money = DbInterface.get_inventory(inventory_id).money;
-
-    return res.status(200).end(JSON.stringify(money));
-});
-
-// add money
-router.put('/inventory/:inventory_id/money/:value', function (req, res, next) {
-    let inventory_id = Number(req.params.inventory_id);
-    if (isNaN(inventory_id)) {
-        res.status(404).send();
-    }
-
-    let value = Number(req.params.value);
-    if (isNaN(value)) {
-        res.status(500).send();
-    }
-
-    let money = DbInterface.get_inventory(inventory_id).money + value;
-
-    return res.status(200).end(JSON.stringify(value));
-    // return res.status(501).end("This Route is not Implemented");
-});
-
-
-// edit inventory
-router.put('/inventory', function (req, res, next) {
-    // todo is
-    return res.status(501).end("This Route is not Implemented");
-});
-
-// delete inventory
-router.delete('/inventory/:id', function (req, res, next) {
-    // todo is gamemaster
-    return res.status(501).end("This Route is not Implemented");
+    let items = DbInterface.get_items(inventory_id);
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(JSON.stringify(items));
 });
 
 //#endregion
 
 
-//#region item
+//#region POST
 
-// get item
-router.get('/item/:id', function (req, res, next) {
-    // todo hash access to project
-    let id = Number(req.params.id);
-    if (isNaN(id)) {
-        res.status(404).send();
-    }
+/**
+ * inserts a new project into the database and returns the inserted project
+ */
+router.post("/user", project_validation, function (req, res, next) {
+    let user = {
+        name: req.body.name,
+        mail: req.body.mail,
+        pw_hash: req.body.pw_hash,
+        registration_date: req.body.registration_date
+    };
 
-    let item = DbInterface.get_item(id);
-    if (item === undefined) {
-        return res.status(404).end();
-    }
-    else {
-        return res.status(200).end(JSON.stringify(item));
-    }
+    let _user = DbInterface.new_project(user);
+
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(JSON.stringify(_user));
 });
 
-// get all items owned by inventory
-router.get('/item/all/:inventory_id', function (req, res, next) {
-    let inventory_id = Number(req.params.inventory_id);
-    if (isNaN(inventory_id)) {
-        res.status(404).send();
-    }
+/**
+ * inserts a new user into the database and returns the inserted user
+ */
+router.post("/project", user_validation, function (req, res, next) {
+    let current_user_id = 4; // todo find out
 
-    let items = DbInterface.get_all_items(inventory_id);
-    return res.status(200).end(JSON.stringify(items));
+    let project = {
+        name: req.body.name,
+        gamemaster: current_user_id
+    };
+
+    let _project = DbInterface.new_project(project);
+
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(JSON.stringify(_project));
 });
 
-// new item
-router.post('/item/:id', function (req, res, next) {
-    // todo is gm or is owner of inventory
-    return res.status(501).end("This Route is not Implemented");
+/**
+ * inserts a new inventory into the database and returns the inserted inventory
+ */
+router.post("/inventory", inventory_validation, function (req, res, next) {
+    let current_user_id = 4; // todo find out
+
+    let inventory = {
+        money: req.body.money,
+        project: req.body.project
+    };
+
+    let _inventory = DbInterface.new_inventory(inventory, current_user_id);
+
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(JSON.stringify(_inventory));
 });
 
-// edit item
-router.put('/item/:id', function (req, res, next) {
-    // todo is gm or is owner of inventory
-    return res.status(501).end("This Route is not Implemented");
+/**
+ * inserts a new item into the database and returns the inserted item
+ */
+router.post("/item", item_validation, function (req, res, next) {
+    let item = {
+        name: req.body.name,
+        quantity: req.body.quantity,
+        description: req.body.description,
+        notes: req.body.notes,
+        inventory: req.body.inventory
+    };
+
+    let _item = DbInterface.new_item(item);
+
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end(JSON.stringify(_item));
 });
 
-// delete id
-router.delete('/item/:id', function (req, res, next) {
-    // todo is gm or is owner of inventory
-    return res.status(501).end("This Route is not Implemented");
-});
+//#endregion
 
+
+//#region PUT
+//#endregion
+
+
+//#region DELETE
 //#endregion
 
 module.exports = router;

@@ -1,8 +1,9 @@
 class Project {
 
-    constructor(id, name) {
+    constructor(id, name, gamemaster) {
         this.id = id;
         this.name = name;
+        this.gamemaster = gamemaster;
     }
 
 }
