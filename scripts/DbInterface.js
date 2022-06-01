@@ -358,7 +358,7 @@ class DbInterface {
         const db = new sqlite(dbName);
 
         const rows = db.prepare(`
-            SELECT users.id, name, mail, registration_date
+            SELECT merge.id, name, mail, registration_date
                 FROM ((users JOIN players on users.id = players.user) AS merge
                     JOIN inventories ON merge.inventory = inventories.id)
             WHERE project = ?;`).all(project_id);
@@ -372,12 +372,16 @@ class DbInterface {
         return users;
     }
 
-    // /**
-    //  * returns an inventory
-    //  * @param inventory_id
-    //  */
-    // static get_inventory(inventory_id) {
-    // }
+    /**
+     * returns an inventory
+     * @param inventory_id
+     */
+    static get_inventory(inventory_id) {
+        const db = new sqlite(dbName);
+
+        const row = db.prepare("SELECT * FROM inventories WHERE id = ?;").get(inventory_id);
+        return {id: row.id, money: row.money, project: row.project};
+    }
 
     /**
      * returns all inventory of a project
