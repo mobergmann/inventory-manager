@@ -17,7 +17,7 @@ let tmp1 = window.location.href.split('/');
 let tmp2 = tmp1[tmp1.length-1];
 const project_id = Number(tmp2);
 
-const inventory_id = Number(1);
+const inventory_id = Number(4);
 
 
 ///////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ xhr2.onerror = function() {
     alert("Network error occurred");
 }
 
-xhr2.open('GET', `/api/item/all/${inventory_id}`);
+xhr2.open('GET', `/api/inventory/items/${inventory_id}`);
 xhr2.setRequestHeader("Content-Type", "application/json");
 xhr2.send();
 
