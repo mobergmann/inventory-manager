@@ -335,10 +335,11 @@ class DbInterface {
             const db = new sqlite(dbName);
 
             const rows = db.prepare(`
-                SELECT DISTINCT project AS id, name FROM
-                    ((inventories JOIN players ON inventories.id = players.inventory) AS merge
-                        JOIN projects ON merge.project = projects.id)
-                WHERE merge.user = @user_id OR projects.gamemaster = @user_id;`
+                SELECT DISTINCT projects.id, name
+                    FROM (players JOIN inventories on players.inventory = inventories.id) AS m1 JOIN projects ON m1.project = projects.id
+                    WHERE user = @user_id
+                UNION
+                    SELECT id, name FROM projects WHERE gamemaster = @user_id;`
             ).all({user_id: user_id});
 
             let projects = [];
