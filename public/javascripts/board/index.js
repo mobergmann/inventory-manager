@@ -1,26 +1,40 @@
-const my_id = 3;
+const my_id = 1;
 
 function display_no_projects_found() {
     alert("Not Implemented");
 }
 
-function display_projects(projects) {
+function display_project(project) {
     const projects_list = document.getElementById("projects-list");
 
-    projects.forEach(project => {
-        let d = `
-            <a href="/board/view/${project.id}">
-                <li class="list-group-item">
-                    <div class="name">${project.name}</div>
-                    <div class="delete btn btn-outline-dark">
-                        <span class="material-icons">delete</span></div>
-                    <div class="edit btn btn-outline-dark">
-                        <span class="material-icons">mode_edit</span>
-                    </div>
-                </li>
-            </a>`;
+    let d = `
+        <li class="list-group-item">
+            <div class="name">
+                ${project.name}
+            </div>
+            
+            <div>
+                <a href="/board/view/${project.id}">
+                    <button type="button" class="btn btn-primary">View</button>
+                </a>
+            </div>
+            
+            <div>
+                <button class="delete btn btn-outline-dark">
+                    <span class="material-icons">delete</span>
+                </button>
+                <button class="edit btn btn-outline-dark">
+                    <span class="material-icons">mode_edit</span>
+                </button>
+            </div>
+        </li>`;
 
-        projects_list.innerHTML += d;
+    projects_list.innerHTML += d;
+}
+
+function display_projects(projects) {
+    projects.forEach(project => {
+        display_project(project);
     });
 }
 
@@ -29,22 +43,50 @@ function display_error(error) {
 }
 
 
+///////////////////////////////////////////////////////
+// Get Projects
 
-const xhr = new XMLHttpRequest();
+const xhr1 = new XMLHttpRequest();
 
-xhr.onload = function() {
-    if (xhr.status === 200) {
-        let projects = JSON.parse(xhr.responseText);
-        display_projects(projects);
-    } else if (xhr.status === 404) {
+xhr1.onload = function() {
+    if (xhr1.status === 200) {
+        let project = JSON.parse(xhr1.responseText);
+        display_projects(project);
+    } else if (xhr1.status === 404) {
         display_no_projects_found();
     }
 }
 
-xhr.onerror = function() {
+xhr1.onerror = function() {
     alert("Network error occurred");
 }
 
-xhr.open('GET', `/api/projects/${my_id}`);
+xhr1.open('GET', `/api/projects/${my_id}`);
 // xhr.setRequestHeader("Content-Type", "application/json");
-xhr.send();
+xhr1.send();
+
+
+
+///////////////////////////////////////////////////////
+// New Projects
+
+function submit_item() {
+    const xhr2 = new XMLHttpRequest();
+
+    xhr2.onload = function() {
+        if (xhr2.status === 200) {
+            let projects = JSON.parse(xhr2.responseText);
+            display_project(projects);
+        } else if (xhr2.status === 404) {
+            display_no_projects_found();
+        }
+    }
+
+    xhr2.onerror = function() {
+        alert("Network error occurred");
+    }
+
+    xhr2.open('POST', `/api/project`);
+    xhr2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr2.send(JSON.stringify({name: document.getElementById("new-name").value}));
+}

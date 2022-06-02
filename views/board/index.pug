@@ -1,6 +1,38 @@
 extends ../layout
 
 block content
-    ul#projects-list.list-group
+    style.
+        header {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem;
+        }
+    div(class="container", style="max-width: 60rem")
+
+        header
+            h1 Projects
+            button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-project-modal")
+                | +
+        ul#projects-list.list-group
+
+    div#new-project-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
+        div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
+            div(class="modal-content")
+                form#mew-project-form(onsubmit="return false")
+                    fieldset
+                        div(class="modal-header")
+                            h5#new-project-modal-label.modal-title New Project
+                        div(class="modal-body")
+                            div
+                                //div(class="form-floating", style="display:none")
+                                //    input#new-id(type="number", name="name", placeholder="Name", class="form-control")
+                                //    label(for="new-id") Id
+                                div(class="form-floating")
+                                    input#new-name(type="text", name="name", placeholder="Name", class="form-control")
+                                    label(for="new-name") Name
+                        div(class="modal-footer")
+                            div.new-item-form-buttons
+                                input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_item()")
+                                input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
 
     script(src="/javascripts/board/index.js")

@@ -124,10 +124,10 @@ router.post("/user", project_validation, function (req, res, next) {
 });
 
 /**
- * inserts a new user into the database and returns the inserted user
+ * inserts a new project into the database and returns the inserted project
  */
 router.post("/project", user_validation, function (req, res, next) {
-    let current_user_id = 4; // todo find out
+    let current_user_id = 1; // todo find out
 
     let project = {
         name: req.body.name,
@@ -144,7 +144,7 @@ router.post("/project", user_validation, function (req, res, next) {
  * inserts a new inventory into the database and returns the inserted inventory
  */
 router.post("/inventory", inventory_validation, function (req, res, next) {
-    let current_user_id = 4; // todo find out
+    let current_user_id = 1; // todo find out
 
     let inventory = {
         money: req.body.money,
