@@ -1,11 +1,68 @@
 extends ../layout
 
 block content
+    style.
+        header {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem;
+        }
+
+    div#new-item-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
+        div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
+            div(class="modal-content")
+                form#mew-item-form(onsubmit="return false")
+                    fieldset
+                        div(class="modal-header")
+                            h5#new-item-modal-Label.modal-title New Item
+                        div(class="modal-body")
+                            div
+                                div(class="form-floating", style="display:none")
+                                    input#new-item-id(type="number", name="name", placeholder="Name", class="form-control")
+                                    label(for="new-item-id") Id
+                                div(class="form-floating")
+                                    input#new-item-name(type="text", name="name", placeholder="Name", class="form-control")
+                                    label(for="new-item-name") Name
+                                div(class="form-floating")
+                                    input#new-item-quantity(type="number", name="quantity", placeholder="0", class="form-control")
+                                    label(for="new-item-quantity") Quantity
+                                div(class="form-floating")
+                                    textarea#new-item-description(name="description", placeholder="Enter a description for this item", class="form-control")
+                                    label(for="new-item-description") Description
+                                div(class="form-floating")
+                                    textarea#new-item-notes(name="notes", placeholder="Enter your notes for this item", class="form-control")
+                                    label(for="new-item-notes") Notes
+                        div(class="modal-footer")
+                            div.new-item-form-buttons
+                                input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_item()")
+                                input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
+
+    div#new-inventory-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
+        div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
+            div(class="modal-content")
+                form#mew-inventory-form(onsubmit="return false")
+                    fieldset
+                        div(class="modal-header")
+                            h5#new-inventory-modal-Label.modal-title New Item
+                        div(class="modal-body")
+                            div
+                                div(class="form-floating")
+                                    input#new-inventory-for-user(type="text", name="name", placeholder="For", class="form-control")
+                                    label(for="new-inventory-for-user") For User
+                        div(class="modal-footer")
+                            div.new-item-form-buttons
+                                input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_inventory()")
+                                input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
+
     div.main
         //- User List
         aside
-            h5.heading User List
-            div#players-list
+            header
+                h5.heading Inventories
+                button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-inventory-modal")
+                    | +
+
+    div#players-list
 
         //- Inventory
         div.inventory
@@ -20,37 +77,6 @@ block content
                         input#money-in(type="number", class="form-control")
                         button#add_money_btn(class="btn btn-outline-secondary", style="width:2rem", onclick="add_money()") +
                         button#sub_money_btn(class="btn btn-outline-secondary", style="width:2rem", onclick="add_money(true)") -
-
-
-            div#new-item-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
-                div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
-                    div(class="modal-content")
-                        form#mew-item-form(onsubmit="return false")
-                            fieldset
-                                div(class="modal-header")
-                                    h5#new-item-modal-Label.modal-title New Item
-                                div(class="modal-body")
-                                    div
-                                        div(class="form-floating", style="display:none")
-                                            input#new-id(type="number", name="name", placeholder="Name", class="form-control")
-                                            label(for="new-id") Id
-                                        div(class="form-floating")
-                                            input#new-name(type="text", name="name", placeholder="Name", class="form-control")
-                                            label(for="new-name") Name
-                                        div(class="form-floating")
-                                            input#new-quantity(type="number", name="quantity", placeholder="0", class="form-control")
-                                            label(for="new-quantity") Quantity
-                                        div(class="form-floating")
-                                            textarea#new-description(name="description", placeholder="Enter a description for this item", class="form-control")
-                                            label(for="new-description") Description
-                                        div(class="form-floating")
-                                            textarea#new-notes(name="notes", placeholder="Enter your notes for this item", class="form-control")
-                                            label(for="new-notes") Notes
-                                div(class="modal-footer")
-                                    div.new-item-form-buttons
-                                        input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_item()")
-                                        input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
-
 
             //- Items
             article.items
@@ -82,7 +108,5 @@ block content
 
                     label(class="fw-lighter") Notes
                     p.item-notes
-
-
 
     script(src="/javascripts/board/view.js")
