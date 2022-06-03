@@ -28,11 +28,12 @@ aside {
 
 .money {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    margin-bottom: 1rem;
 }
 .money div {
-    margin: 1rem;
-    margin-bottom: 2rem;
+    margin: .5rem;
+
 }
 .new-item-form {
     margin: 1rem;

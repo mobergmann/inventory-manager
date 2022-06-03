@@ -20,6 +20,7 @@ const project_id = Number(tmp2);
 const inventory_id = Number(4);
 
 
+
 ///////////////////////////////////////////////////////
 // Helper Functions
 
@@ -28,21 +29,21 @@ function display_error(error) {
 }
 
 
+
 ///////////////////////////////////////////////////////
-// User List
+// GET Inventories
 
 function display_no_users_found() {
     alert("Not Implemented");
 }
 
-function display_users(players) {
+function display_user(user) {
     const players_list = document.getElementById("players-list");
 
-    players.forEach(player => {
-        let tmp = `
+    let tmp = `
             <ul class="list-group">
                 <li class="list-group-item">
-                    ${player.name}
+                    ${user.name}
                     <div class="kick btn btn-outline-danger">
                         <span class="material-icons">cancel</span>
                     </div>
@@ -53,7 +54,12 @@ function display_users(players) {
                 </li>
             </ul>`;
 
-        players_list.innerHTML += tmp;
+    players_list.innerHTML += tmp;
+}
+
+function display_users(players) {
+    players.forEach(player => {
+        display_user(player);
     });
 }
 
@@ -79,13 +85,47 @@ xhr1.send();
 
 
 ///////////////////////////////////////////////////////
+// GET Inventories
+
+function submit_inventory() {
+    function get_inventory() {
+        return {
+            money: 0,
+            project: 1, // todo get project id
+            user: parseInt(document.getElementById('new-inventory-for-user').value)
+        };
+    }
+
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            let users = JSON.parse(xhr.responseText);
+            display_user(users);
+        } else if (xhr.status === 404) {
+            display_error();
+        }
+    }
+
+    xhr.onerror = function() {
+        alert("Network error occurred");
+    }
+
+    xhr.open('GET', `/api/inventory`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(get_inventory()));
+}
+
+
+///////////////////////////////////////////////////////
 // Item List
 
 class Item {
     static item_list = document.getElementById("items-list");
 
-    constructor(id, name, quantity, description, notes) {
-
+    constructor(id, name, quantity, description, notes)
+    {
         this.id = id;
         this.name = name;
         this.quantity = quantity;

@@ -25,7 +25,8 @@ const item_validation = [
     body("board").isInt({min: 1})
 ];
 const inventory_validation = [
-    body("money").isInt()
+    body("money").isInt(),
+    body("user").isInt({min: 1})
 ];
 
 
@@ -144,14 +145,12 @@ router.post("/project", user_validation, function (req, res, next) {
  * inserts a new inventory into the database and returns the inserted inventory
  */
 router.post("/inventory", inventory_validation, function (req, res, next) {
-    let current_user_id = 1; // todo find out
-
     let inventory = {
         money: req.body.money,
         project: req.body.project
     };
 
-    let _inventory = DbInterface.new_inventory(inventory, current_user_id);
+    let _inventory = DbInterface.new_inventory(inventory, req.body.user);
 
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).end(JSON.stringify(_inventory));
