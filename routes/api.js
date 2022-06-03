@@ -182,6 +182,55 @@ router.post("/item", item_validation, function (req, res, next) {
 
 
 //#region DELETE
+
+router.delete("/user/:user_id", function (req, res, next) {
+    let user_id = Number(req.params.user_id);
+    if (isNaN(user_id)) {
+        res.status(404).send();
+    }
+
+    DbInterface.delete_user(user_id);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(JSON.stringify(user_id));
+});
+
+router.delete("/project/:project_id", function (req, res, next) {
+    let project_id = Number(req.params.project_id);
+    if (isNaN(project_id)) {
+        res.status(404).send();
+    }
+
+    DbInterface.delete_project(project_id);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(JSON.stringify(project_id));
+});
+
+router.delete("/inventory/:inventory_id", function (req, res, next) {
+    let inventory_id = Number(req.params.inventory_id);
+    if (isNaN(inventory_id)) {
+        res.status(404).send();
+    }
+
+    DbInterface.delete_inventory(inventory_id);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(JSON.stringify(inventory_id));
+});
+
+router.delete("/item/:item_id", function (req, res, next) {
+    let item_id = Number(req.params.item_id);
+    if (isNaN(item_id)) {
+        res.status(404).send();
+    }
+
+    DbInterface.delete_item(item_id);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(JSON.stringify(item_id));
+});
+
 //#endregion
 
 module.exports = router;

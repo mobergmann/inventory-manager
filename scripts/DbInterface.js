@@ -497,7 +497,7 @@ class DbInterface {
             return {
                 id: row.id,
                 money: row.money,
-                mail: row.project
+                project: row.project
             };
         } finally {
             if (db.inTransaction) {
@@ -536,6 +536,69 @@ class DbInterface {
 
 
 //#region delete
+
+    static delete_item(item_id) {
+        const db = new sqlite(dbName);
+        db.prepare("DELETE FROM items WHERE id = ?").run(item_id);
+    }
+
+    static delete_inventory(inventory_id) {
+        const db = new sqlite(dbName);
+
+        db.prepare("BEGIN").run();
+        try {
+            db.prepare("DELETE FROM items WHERE inventory = ?").run(inventory_id);
+            db.prepare("DELETE FROM inventories WHERE id = ?").run(inventory_id);
+            db.prepare("COMMIT").run();
+        } finally {
+            if (db.inTransaction) {
+                db.prepare("ROLLBACK");
+            }
+        }
+    }
+
+    static delete_project(project_id) {
+        const db = new sqlite(dbName);
+
+        db.prepare("BEGIN").run();
+        try {
+            db.prepare("DELETE FROM items WHERE inventory = ?").run(inventory_id);
+            db.prepare("DELETE FROM inventories WHERE id = ?").run(inventory_id);
+            db.prepare("COMMIT").run();
+
+
+            // for each inventory
+            //      delete items
+            //      delete inventory
+
+            // delete project
+            db.prepare("DELETE FROM projects WHERE id = ?").run(project_id);
+        } finally {
+            if (db.inTransaction) {
+                db.prepare("ROLLBACK");
+            }
+        }
+    }
+
+    static delete_user(user_id) {
+        const db = new sqlite(dbName);
+
+        db.prepare("BEGIN").run();
+        try {
+            // for each project
+            //      for each inventory
+            //          delete items
+            //          delete inventory
+
+            // delete project
+            db.prepare("DELETE FROM users WHERE id = ?").run(user_id);
+        } finally {
+            if (db.inTransaction) {
+                db.prepare("ROLLBACK");
+            }
+        }
+    }
+
 //#endregion
 
 }

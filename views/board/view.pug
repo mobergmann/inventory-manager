@@ -8,6 +8,11 @@ block content
             margin: 1rem;
         }
 
+        #players-list {
+            overflow: scroll;
+            max-height: 90%;
+        }
+
     div#new-inventory-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
         div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
             div(class="modal-content")
@@ -110,5 +115,8 @@ block content
 
                     label(class="fw-lighter") Notes
                     p.item-notes
+
+                    button.item-delete(class="delete btn btn-outline-dark", onclick="delete_item(Number(this.getAttribute('itemid')));", itemid="")
+                        span(class="material-icons") delete
 
     script(src="/javascripts/board/view.js")
