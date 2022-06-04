@@ -568,9 +568,6 @@ class DbInterface {
             db.prepare("DELETE FROM inventories WHERE id = ?").run(inventory_id);
             db.prepare("COMMIT").run();
         }
-        catch (e) {
-            console.log(e);
-        }
         finally {
             if (db.inTransaction) {
                 db.prepare("ROLLBACK");
