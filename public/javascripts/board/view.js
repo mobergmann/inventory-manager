@@ -47,7 +47,7 @@ function display_inventories(response) {
     });
 }
 
-function load_users() {
+function load_inventories() {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
@@ -79,7 +79,7 @@ function submit_inventory() {
     xhr.onload = function () {
         if (xhr.status === 200) {
             let inventory = JSON.parse(xhr.responseText);
-            load_users();
+            load_inventories();
         } else if (xhr.status === 404) {
             display_error();
         }
@@ -298,7 +298,7 @@ function delete_item(item_id) {
 
 //#region main
 
-load_users();
+load_inventories();
 load_items();
 
 //#endregion

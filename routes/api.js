@@ -46,19 +46,19 @@ router.get("/projects/:user_id", function (req, res, next) {
     return res.status(200).end(JSON.stringify(projects));
 });
 
-/**
- * Get all users in a project
- */
-router.get("/project/users/:project_id", function (req, res, next) {
-    let project_id = Number(req.params.project_id);
-    if (isNaN(project_id)) {
-        res.status(404).send();
-    }
-
-    let users = DbInterface.get_users(project_id);
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(200).end(JSON.stringify(users));
-});
+// /**
+//  * Get all users in a project
+//  */
+// router.get("/project/users/:project_id", function (req, res, next) {
+//     let project_id = Number(req.params.project_id);
+//     if (isNaN(project_id)) {
+//         res.status(404).send();
+//     }
+//
+//     let users = DbInterface.get_users(project_id);
+//     res.setHeader('Content-Type', 'application/json');
+//     return res.status(200).end(JSON.stringify(users));
+// });
 
 /**
  * Get inventories joined with users, of a certain project

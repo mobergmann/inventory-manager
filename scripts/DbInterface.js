@@ -332,23 +332,26 @@ class DbInterface {
      * @param user_id
      */
     static get_projects(user_id) {
-            const db = new sqlite(dbName);
+        const db = new sqlite(dbName);
 
-            const rows = db.prepare(`
-                SELECT DISTINCT projects.id, name
-                    FROM (players JOIN inventories on players.inventory = inventories.id) AS m1 JOIN projects ON m1.project = projects.id
-                    WHERE user = @user_id
-                UNION
-                    SELECT id, name FROM projects WHERE gamemaster = @user_id;`
-            ).all({user_id: user_id});
+        const rows = db.prepare(`
+            SELECT DISTINCT projects.id, name
+            FROM (players JOIN inventories on players.inventory = inventories.id) AS m1
+                     JOIN projects ON m1.project = projects.id
+            WHERE user = @user_id
+            UNION
+            SELECT id, name
+            FROM projects
+            WHERE gamemaster = @user_id;`
+        ).all({user_id: user_id});
 
-            let projects = [];
-            rows.forEach(row => {
-                let project = {id: row.id, name: row.name};
-                projects.push(project);
-            });
+        let projects = [];
+        rows.forEach(row => {
+            let project = {id: row.id, name: row.name};
+            projects.push(project);
+        });
 
-            return projects;
+        return projects;
     }
 
     /**
@@ -359,9 +362,9 @@ class DbInterface {
         const db = new sqlite(dbName);
 
         const rows = db.prepare(`
-            SELECT merge.id, name, mail, registration_date
-                FROM ((users JOIN players on users.id = players.user) AS merge
-                    JOIN inventories ON merge.inventory = inventories.id)
+            SELECT DISTINCT merge.id, name, mail, registration_date
+            FROM ((users JOIN players on users.id = players.user) AS merge
+                JOIN inventories ON merge.inventory = inventories.id)
             WHERE project = ?;`).all(project_id);
 
         let users = [];
@@ -393,18 +396,24 @@ class DbInterface {
 
         // const rows = db.prepare("SELECT * FROM inventories WHERE project = ?;").all(project_id);
 
+        // const rows = db.prepare(`
+        //     SELECT i1.*, u1.id AS user_id, u1.name, u1.registration_date
+        //     FROM -- players
+        //          ((players p1 JOIN users u1 ON p1.user = u1.id)
+        //              JOIN inventories i1 ON p1.inventory = i1.id)
+        //     WHERE project = @project_id
+        //     UNION
+        //     SELECT i2.*, u2.id, u2.name, u2.registration_date
+        //     FROM -- gamemaster
+        //          ((inventories i2 JOIN projects p2 ON i2.project = p2.id)
+        //              JOIN users u2 ON p2.gamemaster = u2.id)
+        //     WHERE project = @project_id;`).all({project_id: project_id});
         const rows = db.prepare(`
-            -- players
-            SELECT i1.*, u1.id AS user_id, u1.name, u1.registration_date FROM
-                ((players p1 join users u1 on p1.user = u1.id)
-                    JOIN inventories i1 on p1.inventory = i1.id)
-                WHERE project = ?
-            UNION
-            -- gamemaster
-            SELECT i2.*, u2.id, u2.name, u2.registration_date FROM
-                ((inventories i2 join projects p2 on i2.project = p2.id)
-                    join users u2 on p2.gamemaster = u2.id)
-                WHERE project = ?`).all(project_id, project_id);
+            SELECT * -- i1.*, u1.id AS user_id, u1.name, u1.registration_date
+            FROM -- players
+                 ((players p1 join users u1 on p1.user = u1.id)
+                     JOIN inventories i1 on p1.inventory = i1.id)
+            WHERE i1.project = @project_id;`).all({project_id: project_id});
 
         let inventories_and_owners = [];
         rows.forEach(row => {
@@ -567,8 +576,7 @@ class DbInterface {
             db.prepare("DELETE FROM players WHERE inventory = ?").run(inventory_id);
             db.prepare("DELETE FROM inventories WHERE id = ?").run(inventory_id);
             db.prepare("COMMIT").run();
-        }
-        finally {
+        } finally {
             if (db.inTransaction) {
                 db.prepare("ROLLBACK");
             }
