@@ -34,3 +34,7 @@ Here the information for the Database will be stored.
 - players (1:n)
     - user: FK(users->id) (NN)
     - inventory: FK(inventories->id) (U, NN)
+
+
+# TODO
+add user/ owner/ player to inventories table

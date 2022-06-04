@@ -119,4 +119,15 @@ block content
                     button.item-delete(class="delete btn btn-outline-dark", onclick="delete_item(Number(this.getAttribute('itemid')));", itemid="")
                         span(class="material-icons") delete
 
+    template#inventory-template
+        div.inventory
+            ul(class="list-group")
+                li.inventory-name(class="list-group-item")
+                div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
+                span(class="material-icons") cancel
+            <!-- div.view(class="btn btn-outline-dark")-->
+            <!--     <span class="material-icons">visibility</span>-->
+            <!-- div.view(class="btn btn-outline-dark")-->
+            <!--     <span class="material-icons">visibility_off</span>-->
+
     script(src="/javascripts/board/view.js")

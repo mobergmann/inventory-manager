@@ -26,31 +26,24 @@ function display_error(error) {
 
 //#region GET
 
-function display_user(user) {
+function display_inventory(inventory, owner) {
+    const template = document.getElementById("inventory-template");
+    let clone = template.content.cloneNode(true);
+
+    clone.childNodes[0].id = "inventory-" + inventory.id;
+
+    clone.querySelectorAll(".inventory-name")[0].innerHTML = owner.name;
+    clone.querySelectorAll(".inventory-remove-button")[0].setAttribute("inventoryid", inventory.id);
+
     const players_list = document.getElementById("players-list");
-
-    let tmp = `
-        <ul class="list-group">
-            <li class="list-group-item">
-                ${user.name}
-                <div class="kick btn btn-outline-danger">
-                    <span class="material-icons">cancel</span>
-                </div>
-                <!-- div.view(class="btn btn-outline-dark")-->
-                <!--     <span class="material-icons">visibility</span>-->
-                <!-- div.view(class="btn btn-outline-dark")-->
-                <!--     <span class="material-icons">visibility_off</span>-->
-            </li>
-        </ul>`;
-
-    players_list.innerHTML += tmp;
+    players_list.append(clone);
 }
 
-function display_users(players) {
+function display_inventories(response) {
     document.getElementById("players-list").innerHTML = "";
 
-    players.forEach(player => {
-        display_user(player);
+    response.forEach(r => {
+        display_inventory(r.inventory, r.owner);
     });
 }
 
@@ -59,8 +52,8 @@ function load_users() {
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            let users = JSON.parse(xhr.responseText);
-            display_users(users);
+            let response = JSON.parse(xhr.responseText);
+            display_inventories(response);
         } else if (xhr.status === 404) {
             alert("404");
         }
@@ -70,7 +63,8 @@ function load_users() {
         alert("Network error occurred");
     }
 
-    xhr.open('GET', `/api/project/users/${project_id}`);
+    // xhr.open('GET', `/api/project/users/${project_id}`);
+    xhr.open('GET', `/api/inventories/${project_id}`);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send();
 }
@@ -103,6 +97,35 @@ function submit_inventory() {
             user: parseInt(document.getElementById('new-inventory-for-user').value)
         }
     ));
+}
+
+//#endregion
+
+//#region DELETE
+
+function remove_inventory(inventory_id) {
+    const elem = document.getElementById("inventory-" + inventory_id);
+    elem.remove();
+}
+
+function delete_inventory(inventory_id) {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            remove_inventory(inventory_id);
+        } else if (xhr.status === 404) {
+            alert("404");
+        }
+    }
+
+    xhr.onerror = function () {
+        alert("Network error occurred");
+    }
+
+    xhr.open('DELETE', `/api/inventory/${inventory_id}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
 }
 
 //#endregion

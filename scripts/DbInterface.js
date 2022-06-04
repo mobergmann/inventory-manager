@@ -385,21 +385,37 @@ class DbInterface {
     }
 
     /**
-     * returns all inventory of a project
+     * returns all inventories of a project, joined with users
      * @param project_id
      */
     static get_inventories(project_id) {
         const db = new sqlite(dbName);
 
-        const rows = db.prepare("SELECT * FROM inventories WHERE project = ?;").all(project_id);
+        // const rows = db.prepare("SELECT * FROM inventories WHERE project = ?;").all(project_id);
 
-        let inventories = [];
+        const rows = db.prepare(`
+            -- players
+            SELECT i1.*, u1.id AS user_id, u1.name, u1.registration_date FROM
+                ((players p1 join users u1 on p1.user = u1.id)
+                    JOIN inventories i1 on p1.inventory = i1.id)
+                WHERE project = ?
+            UNION
+            -- gamemaster
+            SELECT i2.*, u2.id, u2.name, u2.registration_date FROM
+                ((inventories i2 join projects p2 on i2.project = p2.id)
+                    join users u2 on p2.gamemaster = u2.id)
+                WHERE project = ?`).all(project_id, project_id);
+
+        let inventories_and_owners = [];
         rows.forEach(row => {
-            let inventory = {id: row.id, money: row.money, project: row.project};
-            inventories.push(inventory);
+            let inventory_and_owner = {
+                inventory: {id: row.id, money: row.money, project: row.project},
+                owner: {id: row.user_id, name: row.name, registration_date: row.registration_date}
+            };
+            inventories_and_owners.push(inventory_and_owner);
         });
 
-        return inventories;
+        return inventories_and_owners;
     }
 
     /**
@@ -548,9 +564,14 @@ class DbInterface {
         db.prepare("BEGIN").run();
         try {
             db.prepare("DELETE FROM items WHERE inventory = ?").run(inventory_id);
+            db.prepare("DELETE FROM players WHERE inventory = ?").run(inventory_id);
             db.prepare("DELETE FROM inventories WHERE id = ?").run(inventory_id);
             db.prepare("COMMIT").run();
-        } finally {
+        }
+        catch (e) {
+            console.log(e);
+        }
+        finally {
             if (db.inTransaction) {
                 db.prepare("ROLLBACK");
             }
