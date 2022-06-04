@@ -557,6 +557,15 @@ class DbInterface {
 
 
 //#region edit
+
+    static add_money(inventory_id, money) {
+        const db = new sqlite(dbName);
+        db.prepare(`update inventories
+            set money = ((select money from inventories where inventories.id = @inventory_id) + @money)
+        where inventories.id = @inventory_id;
+        `).run({inventory_id: inventory_id, money: money});
+    }
+
 //#endregion
 
 
