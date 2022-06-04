@@ -13,7 +13,8 @@ block content
             h1 Projects
             button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-project-modal")
                 | +
-        ul#projects-list.list-group
+
+        div#projects-list(class="list-group")
 
     div#new-project-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
         div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
@@ -34,5 +35,19 @@ block content
                             div.new-item-form-buttons
                                 input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_item()")
                                 input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
+    template#project-template
+        div(class="list-group-item list-group-item-action list-group-item-light")
+            div(class="input-group")
+                input.project-name(type="text", class="form-control" disabled="true")
+                //div.project-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
+                //    span(class="material-icons") cancel
+                a.project-link(href="/board/view/")
+                    button(type="button" class="btn btn-primary") View
+        //
+        //div
+        //    button(class="delete btn btn-outline-dark")
+        //        span(class="material-icons") delete
+        //            button(class="edit btn btn-outline-dark")
+        //                span(class="material-icons") mode_edit
 
     script(src="/javascripts/board/index.js")

@@ -5,31 +5,14 @@ function display_no_projects_found() {
 }
 
 function display_project(project) {
+    const template = document.getElementById("project-template");
+    let clone = template.content.cloneNode(true);
+
+    clone.querySelectorAll(".project-name")[0].value = project.name;
+    clone.querySelectorAll(".project-link")[0].href = "/board/view/" + project.id;
+
     const projects_list = document.getElementById("projects-list");
-
-    let d = `
-        <li class="list-group-item">
-            <div class="name">
-                ${project.name}
-            </div>
-            
-            <div>
-                <a href="/board/view/${project.id}">
-                    <button type="button" class="btn btn-primary">View</button>
-                </a>
-            </div>
-            
-            <div>
-                <button class="delete btn btn-outline-dark">
-                    <span class="material-icons">delete</span>
-                </button>
-                <button class="edit btn btn-outline-dark">
-                    <span class="material-icons">mode_edit</span>
-                </button>
-            </div>
-        </li>`;
-
-    projects_list.innerHTML += d;
+    projects_list.append(clone);
 }
 
 function display_projects(projects) {
