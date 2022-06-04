@@ -4,27 +4,35 @@
     height: 100vh;
 }
 
-aside {
-    height: 100vh;
-    padding: 2rem;
-    width: 25rem;
-} #player-list {
-    max-height: 100%;
-    overflow-y: scroll;
+header {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
 }
-
 .heading {
     text-align: center;
 }
 
 
 
+aside {
+    height: 100vh;
+    width: 20rem;
+    padding: 1rem;
+}
+#players-list {
+    overflow-y: scroll;
+    max-height: 90%;
+}
+
 .inventory {
-    margin: 3rem;
     width: 100%;
     display: flex;
-    flex-direction: column;
+
 }
+
+
+
 
 .money {
     display: flex;

@@ -1,18 +1,6 @@
 extends ../layout
 
 block content
-    style.
-        header {
-            display: flex;
-            justify-content: space-between;
-            margin: 1rem;
-        }
-
-        #players-list {
-            overflow: scroll;
-            max-height: 90%;
-        }
-
     div#new-inventory-modal(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true', class="modal fade")
         div(class="modal-dialog modal-dialog-centered modal-dialog-scrollable")
             div(class="modal-content")
@@ -61,6 +49,7 @@ block content
                                 input(type="reset", data-bs-dismiss='modal', value="Cancel", class="btn btn-secondary")
 
 
+
     div.main
         //- User List
         aside
@@ -69,7 +58,7 @@ block content
                 button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-inventory-modal")
                     | +
 
-            div#players-list
+            div#players-list.inventory-container(class="list-group")
 
         //- Inventory
         div.inventory
@@ -120,11 +109,11 @@ block content
                         span(class="material-icons") delete
 
     template#inventory-template
-        div.inventory
-            ul(class="list-group")
-                li.inventory-name(class="list-group-item")
-                div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
-                span(class="material-icons") cancel
+            div.inventory(class="list-group-item list-group-item-action list-group-item-light")
+                div(class="input-group")
+                    input.inventory-name(type="text", class="form-control" disabled="true")
+                    div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
+                        span(class="material-icons") cancel
             <!-- div.view(class="btn btn-outline-dark")-->
             <!--     <span class="material-icons">visibility</span>-->
             <!-- div.view(class="btn btn-outline-dark")-->

@@ -32,7 +32,7 @@ function display_inventory(inventory, owner) {
 
     clone.childNodes[0].id = "inventory-" + inventory.id;
 
-    clone.querySelectorAll(".inventory-name")[0].innerHTML = owner.name;
+    clone.querySelectorAll(".inventory-name")[0].value = owner.name;
     clone.querySelectorAll(".inventory-remove-button")[0].setAttribute("inventoryid", inventory.id);
 
     const players_list = document.getElementById("players-list");
