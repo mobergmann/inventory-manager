@@ -8,7 +8,7 @@ let tmp1 = window.location.href.split('/');
 let tmp2 = tmp1[tmp1.length - 1];
 const project_id = Number(tmp2);
 
-const inventory_id = Number(1);
+const inventory_id = Number(2);
 
 //#endregion
 
@@ -295,10 +295,76 @@ function delete_item(item_id) {
 
 //#endregion
 
+//#region money
+
+function display_money(money) {
+    const elem = document.getElementById("money-out");
+    elem.value = money;
+}
+
+
+function load_money() {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            let inventory = JSON.parse(xhr.responseText);
+            display_money(inventory.money);
+        } else if (xhr.status === 404) {
+            alert("404");
+        }
+        else {
+            console.log(xhr.status);
+        }
+    }
+
+    xhr.onerror = function () {
+        alert("Network error occurred");
+    }
+
+    xhr.open('GET', `/api/inventory/${inventory_id}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}
+
+
+
+function submit_money(is_negative) {
+    let new_money = Number(document.getElementById("money-in").value);
+    if (is_negative) {
+        new_money *= -1;
+    }
+
+    let old_money = Number(document.getElementById("money-out").value);
+
+    let money = old_money + new_money;
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            display_money(money);
+        } else if (xhr.status === 404) {
+            alert("404")
+        }
+    }
+
+    xhr.onerror = function () {
+        alert("Network error occurred");
+    }
+
+    xhr.open('PUT', `/api/money/${inventory_id}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({money: new_money}));
+}
+
+//#endregion
+
 
 //#region main
 
 load_inventories();
 load_items();
+load_money();
 
 //#endregion

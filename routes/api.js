@@ -193,7 +193,7 @@ router.post("/item", item_validation, function (req, res, next) {
 
 //#region PUT
 
-router.put("money/:inventory_id", body("money").isInt(), function (req, res, next) {
+router.put("/money/:inventory_id", body("money").isInt(), function (req, res, next) {
     let inventory_id = Number(req.params.inventory_id);
     if (isNaN(inventory_id)) {
         res.status(404).send();
