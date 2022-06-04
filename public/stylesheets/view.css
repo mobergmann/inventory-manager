@@ -10,7 +10,7 @@ header {
     margin: 1rem;
 }
 .heading {
-    text-align: center;
+    /*text-align: center;*/
 }
 
 
@@ -25,13 +25,16 @@ aside {
     max-height: 90%;
 }
 
-.inventory {
+.users-list {
     width: 100%;
     display: flex;
-
 }
 
-
+.inventory {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+}
 
 
 .money {

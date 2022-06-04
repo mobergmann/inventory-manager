@@ -7,12 +7,12 @@ block content
                 form#mew-inventory-form(onsubmit="return false")
                     fieldset
                         div(class="modal-header")
-                            h5#new-inventory-modal-Label.modal-title New Inventory
+                            h5#new-inventory-modal-Label.modal-title Invite User
                         div(class="modal-body")
                             div
                                 div(class="form-floating")
                                     input#new-inventory-for-user(type="text", name="name", placeholder="For", class="form-control")
-                                    label(for="new-inventory-for-user") User
+                                    label(for="new-inventory-for-user") User id
                         div(class="modal-footer")
                             div.new-item-form-buttons
                                 input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_inventory()")
@@ -64,7 +64,8 @@ block content
         div.inventory
             //- Money
             article.money
-                h3 Money
+                header
+                    h3 Money
                 div.money
                     div(class="input-group")
                         input#money-out(type="number", class="form-control disabled", disabled)
@@ -76,9 +77,9 @@ block content
 
             //- Items
             article.items
-                div
+                header
                     h3 Items
-                    button(type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#new-item-modal")
+                    button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-item-modal")
                         | +
 
                 div#items-list(class="accordion")
@@ -109,7 +110,7 @@ block content
                         span(class="material-icons") delete
 
     template#inventory-template
-            div.inventory(class="list-group-item list-group-item-action list-group-item-light")
+            div.users-list(class="list-group-item list-group-item-action list-group-item-light")
                 div(class="input-group")
                     input.inventory-name(type="text", class="form-control" disabled="true")
                     div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
