@@ -39,15 +39,9 @@ block content
         div(class="list-group-item list-group-item-action list-group-item-light")
             div(class="input-group")
                 input.project-name(type="text", class="form-control" disabled="true")
-                //div.project-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
-                //    span(class="material-icons") cancel
-                a.project-link(href="/board/view/")
-                    button(type="button" class="btn btn-primary") View
-        //
-        //div
-        //    button(class="delete btn btn-outline-dark")
-        //        span(class="material-icons") delete
-        //            button(class="edit btn btn-outline-dark")
-        //                span(class="material-icons") mode_edit
+                a.project-link(class="btn btn-outline-primary", href="/board/view/")
+                    span(class="material-icons") visibility
+                div.inventory-remove-button(class="btn btn-outline-danger")
+                    span(class="material-icons") cancel
 
     script(src="/javascripts/board/index.js")
