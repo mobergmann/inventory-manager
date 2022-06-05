@@ -122,7 +122,7 @@ router.get("/inventory/items/:inventory_id", function (req, res, next) {
 /**
  * inserts a new project into the database and returns the inserted project
  */
-router.post("/user", project_validation, function (req, res, next) {
+router.post("/user", user_validation, function (req, res, next) {
     let user = {
         name: req.body.name,
         mail: req.body.mail,
@@ -139,7 +139,7 @@ router.post("/user", project_validation, function (req, res, next) {
 /**
  * inserts a new project into the database and returns the inserted project
  */
-router.post("/project", user_validation, function (req, res, next) {
+router.post("/project", project_validation, function (req, res, next) {
     let user_id = req.user.id;
 
     let project = {
