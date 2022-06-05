@@ -3,9 +3,18 @@ const router = express.Router();
 // const {body, validationResult} = require('express-validator');
 // const DbInterface = require("../scripts/DbInterface");
 const passport = require("passport");
+const {body} = require("express-validator");
 
-// router.post('/sign_up', function (req, res, next) {
-// });
+const user_validation = [
+    body("name").isLength({min: 3}),
+    body("mail").isEmail(),
+    body("pw_hash").notEmpty(),
+    body("registration_date").isDate({format: "%Y-%m-%d %H:%M:%S"})
+];
+
+
+router.post('/sign_up', user_validation, function (req, res, next) {
+});
 
 // todo redirect to targeted url (/cpanel/products or /cpanel/users)
 router.post('/sign_in',

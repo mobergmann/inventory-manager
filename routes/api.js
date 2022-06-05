@@ -140,11 +140,11 @@ router.post("/user", project_validation, function (req, res, next) {
  * inserts a new project into the database and returns the inserted project
  */
 router.post("/project", user_validation, function (req, res, next) {
-    let current_user_id = 1; // todo find out
+    let user_id = req.user.id;
 
     let project = {
         name: req.body.name,
-        gamemaster: current_user_id
+        gamemaster: user_id
     };
 
     let _project = DbInterface.new_project(project);
