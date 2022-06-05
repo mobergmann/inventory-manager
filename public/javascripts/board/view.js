@@ -8,7 +8,7 @@ let tmp1 = window.location.href.split('/');
 let tmp2 = tmp1[tmp1.length - 1];
 const project_id = Number(tmp2);
 
-const inventory_id = Number(2);
+let inventory_id; // = Number(2);
 
 //#endregion
 
@@ -24,6 +24,41 @@ function display_error(error) {
 
 //#region Inventory
 
+function change_inv_stats() {
+    //  money
+    load_money(()=> {
+        //  items
+        load_items();
+    });
+}
+
+function load_inventory(inventory_id) {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            let response = JSON.parse(xhr.responseText);
+            change_inv_stats(response);
+        } else if (xhr.status === 404) {
+            alert("404");
+        }
+    }
+
+    xhr.onerror = function () {
+        alert("Network error occurred");
+    }
+
+    // xhr.open('GET', `/api/project/users/${project_id}`);
+    xhr.open('GET', `/api/inventory/${inventory_id}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}
+
+function change_inventory(_inventory_id) {
+    inventory_id = _inventory_id;
+    load_inventory(inventory_id);
+}
+
 //#region GET
 
 function display_inventory(inventory, owner) {
@@ -34,6 +69,7 @@ function display_inventory(inventory, owner) {
 
     clone.querySelectorAll(".inventory-name")[0].value = owner.name;
     clone.querySelectorAll(".inventory-remove-button")[0].setAttribute("inventoryid", inventory.id);
+    clone.querySelectorAll(".inventory-view-button")[0].setAttribute("inventoryid", inventory.id);
 
     const players_list = document.getElementById("players-list");
     players_list.append(clone);
@@ -47,13 +83,19 @@ function display_inventories(response) {
     });
 }
 
-function load_inventories() {
+function load_inventories(next = ()=>{}) {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
         if (xhr.status === 200) {
             let response = JSON.parse(xhr.responseText);
+            // set default value for current inventory id
+            if (response.length > 0) {
+                inventory_id = response[0].inventory.id;
+            }
             display_inventories(response);
+
+            next();
         } else if (xhr.status === 404) {
             alert("404");
         }
@@ -194,19 +236,24 @@ class Item {
 //#region GET
 
 function display_items(items) {
+    const item_list = document.getElementById("items-list");
+    item_list.innerHTML = "";
+
     items.forEach(item => {
         let i = new Item(item.id, item.name, item.quantity, item.description, item.notes);
         i.display();
     });
 }
 
-function load_items() {
+function load_items(next = ()=>{}) {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
         if (xhr.status === 200) {
             let items = JSON.parse(xhr.responseText);
             display_items(items);
+
+            next();
         } else if (xhr.status === 404) {
             alert("404");
         }
@@ -295,7 +342,8 @@ function delete_item(item_id) {
 
 //#endregion
 
-//#region money
+
+//#region Money
 
 function display_money(money) {
     const elem = document.getElementById("money-out");
@@ -303,13 +351,15 @@ function display_money(money) {
 }
 
 
-function load_money() {
+function load_money(next = ()=>{}) {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
         if (xhr.status === 200) {
             let inventory = JSON.parse(xhr.responseText);
             display_money(inventory.money);
+
+            next();
         } else if (xhr.status === 404) {
             alert("404");
         }
@@ -363,8 +413,10 @@ function submit_money(is_negative) {
 
 //#region main
 
-load_inventories();
-load_items();
-load_money();
+load_inventories(() => {
+    load_items(() => {
+        load_money();
+    });
+});
 
 //#endregion

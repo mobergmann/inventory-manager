@@ -110,14 +110,16 @@ block content
                         span(class="material-icons") delete
 
     template#inventory-template
-            div.users-list(class="list-group-item list-group-item-action list-group-item-light")
-                div(class="input-group")
-                    input.inventory-name(type="text", class="form-control" disabled="true")
-                    div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
-                        span(class="material-icons") cancel
-            <!-- div.view(class="btn btn-outline-dark")-->
-            <!--     <span class="material-icons">visibility</span>-->
-            <!-- div.view(class="btn btn-outline-dark")-->
-            <!--     <span class="material-icons">visibility_off</span>-->
+        div.users-list(class="list-group-item list-group-item-action list-group-item-light")
+            div(class="input-group")
+                input.inventory-name(type="text", class="form-control" disabled="true")
+                div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_inventory(this.getAttribute('inventoryid'))", inventoryid="")
+                    span(class="material-icons") cancel
+                div.inventory-view-button(class="btn btn-outline-primary", onclick="change_inventory(this.getAttribute('inventoryid'))", inventoryid="")
+                    span(class="material-icons") visibility
+        <!-- div.view(class="btn btn-outline-dark")-->
+        <!--     <span class="material-icons">visibility</span>-->
+        <!-- div.view(class="btn btn-outline-dark")-->
+        <!--     <span class="material-icons">visibility_off</span>-->
 
     script(src="/javascripts/board/view.js")
