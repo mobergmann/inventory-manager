@@ -35,13 +35,11 @@ const inventory_validation = [
 /**
  * get all projects visible to the given user
  */
-router.get("/projects/:user_id", function (req, res, next) {
-    let user_id = Number(req.params.user_id);
-    if (isNaN(user_id)) {
-        res.status(404).send();
-    }
+router.get("/projects", function (req, res, next) {
+    let user_id = req.user.id;
 
     let projects = DbInterface.get_projects(user_id);
+
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).end(JSON.stringify(projects));
 });

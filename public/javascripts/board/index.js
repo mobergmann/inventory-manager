@@ -1,5 +1,3 @@
-const my_id = 1;
-
 function display_no_projects_found() {
     alert("Not Implemented");
 }
@@ -44,7 +42,7 @@ xhr1.onerror = function() {
     alert("Network error occurred");
 }
 
-xhr1.open('GET', `/api/projects/${my_id}`);
+xhr1.open('GET', "/api/projects");
 // xhr.setRequestHeader("Content-Type", "application/json");
 xhr1.send();
 
