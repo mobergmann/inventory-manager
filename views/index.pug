@@ -9,7 +9,6 @@ block content
 
             display: flex;
             flex-direction: row;
-            justify-content: center;
             justify-content: space-evenly;
             align-items: center;
         }
@@ -48,7 +47,8 @@ block content
         div(class="vr")
         div.sign.sign-up
             h3 Sign Up
-            form(method="POST", action="/api/user")
+            form(action="javascript:void(0);")
+                //-(method="POST", action="/auth/sign_up")
                 div(class="mb-3")
                     label(for="sign-up_username" class="form-label") Username
                     input(type="text" class="form-control" id="sign-up_username", name="name")
@@ -66,4 +66,6 @@ block content
                 //-div(class="mb-3 form-check")
                 //-    input(type="checkbox" class="form-check-input" id="exampleCheck1")
                 //-    label(class="form-check-label" for="exampleCheck1") Check me out
-                button(type="submit" class="btn btn-primary") Submit
+                button(type="submit" class="btn btn-primary", onclick="_sign_up()") Submit
+
+    script(src="/javascripts/index.js")
