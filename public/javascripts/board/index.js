@@ -22,13 +22,7 @@ function display_projects(projects) {
     });
 }
 
-function display_error(error) {
-    alert("Not Implemented\n\n" + error);
-}
-
 function load_projects() {
-    // Get Projects
-
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function() {
@@ -52,7 +46,7 @@ function load_projects() {
 ///////////////////////////////////////////////////////
 // New Project
 
-function submit_item() {
+function submit_project() {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function() {

@@ -19,6 +19,7 @@ const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 const boardRouter = require('./routes/board');
 const authRouter = require('./routes/auth');
+const {body} = require("express-validator");
 
 
 const app = express();

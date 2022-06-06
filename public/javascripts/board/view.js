@@ -135,7 +135,7 @@ function submit_inventory() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({
             money: 0,
-            project: 1, // todo get project id
+            project: project_id,
             user: parseInt(document.getElementById('new-inventory-for-user').value)
         }
     ));
@@ -246,6 +246,10 @@ function display_items(items) {
 }
 
 function load_items(next = ()=>{}) {
+    if (!inventory_id) {
+        return;
+    }
+
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {

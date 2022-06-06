@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {body, validationResult} = require('express-validator');
 const DbInterface = require("../scripts/DbInterface");
+const bcrypt = require("bcrypt");
 
 
 const user_validation = [
@@ -119,22 +120,7 @@ router.get("/inventory/items/:inventory_id", function (req, res, next) {
 
 //#region POST
 
-/**
- * inserts a new project into the database and returns the inserted project
- */
-router.post("/user", user_validation, function (req, res, next) {
-    let user = {
-        name: req.body.name,
-        mail: req.body.mail,
-        pw_hash: req.body.pw_hash,
-        registration_date: req.body.registration_date
-    };
-
-    let _user = DbInterface.new_project(user);
-
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(200).end(JSON.stringify(_user));
-});
+// user post is in app.js
 
 /**
  * inserts a new project into the database and returns the inserted project
