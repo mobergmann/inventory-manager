@@ -41,7 +41,7 @@ block content
                 input.project-name(type="text", class="form-control" disabled="true")
                 a.project-link(class="btn btn-outline-primary", href="/board/view/")
                     span(class="material-icons") visibility
-                div.inventory-remove-button(class="btn btn-outline-danger")
+                div.inventory-remove-button(class="btn btn-outline-danger", onclick="delete_project(Number(this.getAttribute('projectid')));", projectid="")
                     span(class="material-icons") cancel
 
     script(src="/javascripts/board/index.js")

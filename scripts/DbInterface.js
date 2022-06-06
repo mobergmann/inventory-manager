@@ -291,17 +291,14 @@ class DbInterface {
 
         db.prepare("BEGIN").run();
         try {
-            db.prepare("DELETE FROM items WHERE inventory = ?").run(inventory_id);
-            db.prepare("DELETE FROM inventories WHERE id = ?").run(inventory_id);
-            db.prepare("COMMIT").run();
 
-
-            // for each inventory
-            //      delete items
-            //      delete inventory
-
-            // delete project
+            let inventories = this.get_inventories(project_id);
+            inventories.forEach(inventory => {
+                this.delete_inventory(inventory);
+            });
             db.prepare("DELETE FROM projects WHERE id = ?").run(project_id);
+
+            db.prepare("COMMIT").run();
         } finally {
             if (db.inTransaction) {
                 db.prepare("ROLLBACK");
@@ -309,24 +306,37 @@ class DbInterface {
         }
     }
 
-    static delete_user(user_id) {
-        const db = new sqlite(dbName);
+    // static remove_user_from_project(inventory_id, user_id) {
+    //     const db = new sqlite(dbName);
+    //
+    //     db.prepare("DELETE FROM players WHERE user = @user_id AND inventory = @inventory_id")
+    //         .run(user_id, inventory_id);
+    // }
 
-        db.prepare("BEGIN").run();
-        try {
-            // for each project
-            //      for each inventory
-            //          delete items
-            //          delete inventory
-
-            // delete project
-            db.prepare("DELETE FROM users WHERE id = ?").run(user_id);
-        } finally {
-            if (db.inTransaction) {
-                db.prepare("ROLLBACK");
-            }
-        }
-    }
+    // static delete_user(user_id) {
+    //     const db = new sqlite(dbName);
+    //
+    //     db.prepare("BEGIN").run();
+    //     try {
+    //         let projects = this.get_projects(user_id);
+    //         projects.forEach(project => {
+    //             if (project.gamemaster) {
+    //                 this.delete_project(project);
+    //             }
+    //             else {
+    //                 DbInterface.remove_user_from_project(project, user_id);
+    //             }
+    //
+    //         });
+    //         db.prepare("DELETE FROM projects WHERE id = ?").run(project_id);
+    //
+    //         db.prepare("COMMIT").run();
+    //     } finally {
+    //         if (db.inTransaction) {
+    //             db.prepare("ROLLBACK");
+    //         }
+    //     }
+    // }
 
 //#endregion
 

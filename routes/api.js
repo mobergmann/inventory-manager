@@ -243,17 +243,17 @@ router.delete("/project/:project_id", function (req, res, next) {
     res.status(200).send(JSON.stringify(project_id));
 });
 
-router.delete("/user/:user_id", function (req, res, next) {
-    let user_id = Number(req.params.user_id);
-    if (isNaN(user_id)) {
-        res.status(404).send();
-    }
-
-    DbInterface.delete_user(user_id);
-
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(JSON.stringify(user_id));
-});
+// router.delete("/user/:user_id", function (req, res, next) {
+//     let user_id = Number(req.params.user_id);
+//     if (isNaN(user_id)) {
+//         res.status(404).send();
+//     }
+//
+//     DbInterface.delete_user(user_id);
+//
+//     res.setHeader('Content-Type', 'application/json');
+//     res.status(200).send(JSON.stringify(user_id));
+// });
 
 //#endregion
 
