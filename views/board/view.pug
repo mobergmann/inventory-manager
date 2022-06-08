@@ -12,7 +12,7 @@ block content
                             div
                                 div(class="form-floating")
                                     input#new-inventory-for-user(type="text", name="name", placeholder="For", class="form-control")
-                                    label(for="new-inventory-for-user") User id
+                                    label(for="new-inventory-for-user") Username
                         div(class="modal-footer")
                             div.new-item-form-buttons
                                 input(type="submit", data-bs-dismiss='modal', value="Save" class="btn btn-success", onclick="submit_inventory()")
@@ -53,12 +53,19 @@ block content
     div.main
         //- User List
         aside
-            header
-                h5.heading Inventories
-                button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-inventory-modal")
-                    | +
+            div
+                header
+                    h5.heading Inventories
+                    button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-inventory-modal")
+                        | +
+                div#inventories-list.inventory-container(class="list-group")
+            div
+                ul#player-list(class="list-group")
+                    header
+                        h5.heading Players
+                        //button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-player-modal")
+                        //    | +
 
-            div#players-list.inventory-container(class="list-group")
 
         //- Inventory
         div.inventory
@@ -117,5 +124,9 @@ block content
                     span(class="material-icons") cancel
                 div.inventory-view-button(class="btn btn-outline-primary", onclick="change_inventory(this.getAttribute('inventoryid'))", inventoryid="")
                     span(class="material-icons") visibility
+
+    template#player-template
+        li(class="list-group-item list-group-item-action")
+            span(class="material-symbols-outlined", style="display: none") star
 
     script(src="/javascripts/board/view.js")

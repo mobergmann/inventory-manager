@@ -10,6 +10,30 @@ const project_id = Number(tmp2);
 
 let inventory_id; // = Number(2);
 
+let _project;
+
+function init(next = function(){}) {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            _project = JSON.parse(xhr.responseText);
+            next();
+        } else if (xhr.status === 404) {
+            alert("404");
+        }
+    }
+
+    xhr.onerror = function () {
+        alert("Network error occurred");
+    }
+
+    xhr.open('GET', `/api/project/${project_id}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+
+}
+
 //#endregion
 
 
@@ -71,19 +95,19 @@ function display_inventory(inventory, owner) {
     clone.querySelectorAll(".inventory-remove-button")[0].setAttribute("inventoryid", inventory.id);
     clone.querySelectorAll(".inventory-view-button")[0].setAttribute("inventoryid", inventory.id);
 
-    const players_list = document.getElementById("players-list");
+    const players_list = document.getElementById("inventories-list");
     players_list.append(clone);
 }
 
 function display_inventories(response) {
-    document.getElementById("players-list").innerHTML = "";
+    document.getElementById("inventories-list").innerHTML = "";
 
     response.forEach(r => {
         display_inventory(r.inventory, r.owner);
     });
 }
 
-function load_inventories(next = ()=>{}) {
+function load_inventories(next = function(){}) {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
@@ -136,7 +160,7 @@ function submit_inventory() {
     xhr.send(JSON.stringify({
             money: 0,
             project: project_id,
-            user: parseInt(document.getElementById('new-inventory-for-user').value)
+            user: document.getElementById('new-inventory-for-user').value
         }
     ));
 }
@@ -245,7 +269,7 @@ function display_items(items) {
     });
 }
 
-function load_items(next = ()=>{}) {
+function load_items(next = function(){}) {
     if (!inventory_id) {
         return;
     }
@@ -355,7 +379,7 @@ function display_money(money) {
 }
 
 
-function load_money(next = ()=>{}) {
+function load_money(next = function(){}) {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
@@ -366,9 +390,6 @@ function load_money(next = ()=>{}) {
             next();
         } else if (xhr.status === 404) {
             alert("404");
-        }
-        else {
-            console.log(xhr.status);
         }
     }
 
@@ -415,11 +436,59 @@ function submit_money(is_negative) {
 //#endregion
 
 
+//#region Player
+
+function display_players(players) {
+    const template = document.getElementById("player-template");
+    const player_list = document.getElementById("player-list");
+
+    players.forEach(player => {
+        let clone = template.content.cloneNode(true);
+
+        clone.childNodes[0].id = "player-" + player.id;
+        clone.childNodes[0].innerHTML += player.name;
+        if (_project.gamemaster === player.id) {
+            clone.childNodes[0].childNodes[0].style = "display: box";
+        }
+
+        player_list.append(clone);
+    });
+}
+
+function load_players(next = function(){}) {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            let players = JSON.parse(xhr.responseText);
+            display_players(players);
+
+            next();
+        } else if (xhr.status === 404) {
+            alert("404");
+        }
+    }
+
+    xhr.onerror = function () {
+        alert("Network error occurred");
+    }
+
+    xhr.open('GET', `/api/users/${project_id}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}
+
+//#endregion
+
 //#region main
 
-load_inventories(() => {
-    load_items(() => {
-        load_money();
+init(() => {
+    load_players(() => {
+        load_inventories(() => {
+            load_items(() => {
+                load_money();
+            });
+        });
     });
 });
 

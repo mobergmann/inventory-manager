@@ -22,6 +22,23 @@ class DbInterface {
     }
 
     /**
+     * returns a project
+     * @param project_id
+     */
+    static get_project(project_id) {
+        const db = new sqlite(dbName);
+
+        const row = db.prepare("SELECT * FROM projects WHERE id = ?;")
+            .get(project_id);
+
+        return {
+            id: row.id,
+            name: row.name,
+            gamemaster: row.gamemaster
+        };
+    }
+
+    /**
      * returns a list of projects
      * @param user_id
      */
@@ -41,7 +58,7 @@ class DbInterface {
 
         let projects = [];
         rows.forEach(row => {
-            let project = {id: row.id, name: row.name};
+            let project = {id: row.id, name: row.name, gamemaster: row.gamemaster};
             projects.push(project);
         });
 
@@ -56,10 +73,15 @@ class DbInterface {
         const db = new sqlite(dbName);
 
         const rows = db.prepare(`
-            SELECT DISTINCT merge.id, name, mail, registration_date
-            FROM ((users JOIN players on users.id = players.user) AS merge
-                JOIN inventories ON merge.inventory = inventories.id)
-            WHERE project = ?;`).all(project_id);
+            SELECT DISTINCT m.id, name, mail, registration_date
+                FROM ((users u1 JOIN players p1 ON u1.id = p1.user) AS m
+                    JOIN inventories i1 ON m.inventory = i1.id)
+                WHERE i1.project = @project_id
+            UNION
+                SELECT DISTINCT u2.id, u2.name, u2.mail, u2.registration_date
+                    FROM projects AS p1 JOIN users AS u2 ON p1.gamemaster = u2.id
+                WHERE p1.id = @project_id;`
+            ).all({project_id: project_id});
 
         let users = [];
         rows.forEach(row => {
@@ -194,21 +216,25 @@ class DbInterface {
     /**
      * Inserts an inventory into the database
      * @param inventory {{money, project}}
-     * @param owner_id id of the user, who owns the inventory
+     * @param owner_name id of the user, who owns the inventory
      * @returns {{id, money, project}}
      */
-    static new_inventory(inventory, owner_id) {
+    static new_inventory(inventory, owner_name) {
         const db = new sqlite(dbName);
 
         db.prepare("BEGIN").run();
 
         try {
-            // inventories
+            // insert into inventories
             const stmt = db.prepare("INSERT INTO inventories (money, project) VALUES (?, ?)");
             const info = stmt.run(inventory.money, inventory.project);
             let new_project_id = info.lastInsertRowid;
-            // players
-            db.prepare("INSERT INTO players (user, inventory) VALUES (?, ?)").run(owner_id, new_project_id);
+
+            // get owner id by name
+            let owner = db.prepare("SELECT * FROM users WHERE name = ?")
+                .get(owner_name);
+            // insert into players
+            db.prepare("INSERT INTO players (user, inventory) VALUES (?, ?)").run(owner.id, new_project_id);
             db.prepare("COMMIT").run();
 
             const row = db.prepare('SELECT * FROM inventories WHERE id = ?').get(new_project_id);
