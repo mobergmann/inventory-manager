@@ -11,6 +11,7 @@ block content
             flex-direction: row;
             justify-content: space-evenly;
             align-items: center;
+            flex-wrap: wrap;
         }
         .sign {
             width: 20rem;
@@ -24,10 +25,11 @@ block content
             margin-bottom: 1.5rem;
         }
 
-    div.sign-container(class="conatiner")
+    div.sign-container(class="container")
         div.sign.sign-in
             h3 Sign In
-            form(method="POST", action="/auth/sign_in")
+            //form(method="POST", action="/auth/sign_in")
+            form(action="javascript:void(0);")
                 div(class="mb-3")
                     label(for="sign-in_username" class="form-label") Username
                     input(type="text" class="form-control" id="sign-in_username", name="name")
@@ -42,9 +44,9 @@ block content
                 //div(class="mb-3 form-check")
                 //    input(type="checkbox" class="form-check-input" id="exampleCheck1")
                 //    label(class="form-check-label" for="exampleCheck1") Check me out
-                button(type="submit" class="btn btn-primary") Submit
+                button(type="submit" class="btn btn-primary", onclick="_sign_in();") Submit
 
-        div(class="vr")
+        //div(class="vr")
         div.sign.sign-up
             h3 Sign Up
             form(action="javascript:void(0);")
@@ -66,6 +68,6 @@ block content
                 //-div(class="mb-3 form-check")
                 //-    input(type="checkbox" class="form-check-input" id="exampleCheck1")
                 //-    label(class="form-check-label" for="exampleCheck1") Check me out
-                button(type="submit" class="btn btn-primary", onclick="_sign_up()") Submit
+                button(type="submit" class="btn btn-primary", onclick="_sign_up();") Submit
 
     script(src="/javascripts/index.js")

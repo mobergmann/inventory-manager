@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const {body, validationResult} = require('express-validator');
-// const DbInterface = require("../scripts/DbInterface");
 const passport = require("passport");
 const {body} = require("express-validator");
 const bcrypt = require("bcrypt");
@@ -28,26 +26,25 @@ router.post('/sign_up', user_validation, function (req, res, next) {
     let _user = DbInterface.new_user(user);
 
     res.setHeader('Content-Type', 'application/json');
-    // return res.status(200).end(JSON.stringify(_user));
-    return res.redirect('/?status=login_needed'); //status(200).end(JSON.stringify(_user));
-
+    return res.status(200).end(JSON.stringify(_user));
 });
 
-// todo redirect to targeted url (/cpanel/products or /cpanel/users)
 router.post('/sign_in',
     passport.authenticate(
         'local',
         { failureRedirect: '/?auth=failure' }),
     function (req, res, next) {
-        res.redirect("/board");
-        // res.redirect(req.session.returnTo || '/');
+
+    res.setHeader('Content-Type', 'application/json');
         delete req.session.returnTo;
+        return res.status(200).end();
     }
 );
 
 router.get('/sign_out', (req, res, next) => {
-    req.logout();
-    res.redirect('/');
+    req.logout(() => {
+        return res.status(200).end();
+    });
 });
 
 
