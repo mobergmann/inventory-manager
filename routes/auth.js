@@ -13,20 +13,26 @@ const user_validation = [
 
 
 router.post('/sign_up', user_validation, function (req, res, next) {
-    let hash = bcrypt.hashSync(req.body.password, 12);
-    let date = new Date().toString();
+    try {
+        let hash = bcrypt.hashSync(req.body.password, 12);
+        let date = new Date().toString();
 
-    let user = {
-        name: req.body.name,
-        mail: req.body.mail,
-        pw_hash: hash,
-        registration_date: date // todo {format: "%Y-%m-%d %H:%M:%S"}
-    };
+        let user = {
+            name: req.body.name,
+            mail: req.body.mail,
+            pw_hash: hash,
+            registration_date: date // todo {format: "%Y-%m-%d %H:%M:%S"}
+        };
 
-    let _user = DbInterface.new_user(user);
+        let _user = DbInterface.new_user(user);
 
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(200).end(JSON.stringify(_user));
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).end(JSON.stringify(_user));
+    }
+    catch (e) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).end(JSON.stringify(e));
+    }
 });
 
 router.post('/sign_in',

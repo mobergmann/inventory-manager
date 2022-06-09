@@ -6,7 +6,7 @@ function _sign_out() {
     window.location.replace("/");
 }
 
-function logout() {
+function sign_out() {
     const xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
@@ -24,7 +24,12 @@ function logout() {
     xhr.open('GET', "/auth/sign_out");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send();
-
 }
 
 // #endregion
+
+
+const elems = document.getElementsByClassName("manage");
+elems.forEach(elem => {
+    elem.style.display = "none";
+});

@@ -59,6 +59,10 @@ function _sign_up() {
         } else if (xhr.status === 404) {
             alert("404");
         }
+        else {
+            console.log(xhr.status);
+        }
+
     }
 
     xhr.onerror = function() {
